@@ -1,0 +1,26 @@
+{
+  "extends": [
+    "airbnb",
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react",
+    "prettier/standard",
+    "prettier/unicorn",
+    "plugin:flowtype/recommended"
+  ],
+  "parser": "babel-eslint",
+  "plugins": ["unicorn", "flowtype"],
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "rules": {
+    "no-underscore-dangle": ["error", { "allow": ["__DEV__"] }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "curly": ["error", "all"],
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": ["**/*.stories.jsx"] }
+    ]
+  }
+}
