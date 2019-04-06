@@ -1,6 +1,8 @@
 const blue = '#07c';
 const red = '#FF5471';
 const lightgray = '#9a9a9a';
+const black = "#140D33";
+const pink = "#FF80EA"
 
 const theme = {
   breakpoints: ['40em', '52em', '64em'],
@@ -9,6 +11,7 @@ const theme = {
     blue,
     lightgray,
     red,
+    black,
   },
   space: [0, 4, 8, 16, 32, 64, 128, 256],
   fonts: {
@@ -22,7 +25,7 @@ const theme = {
   buttons: {
     primary: {
       color: '#fff',
-      backgroundColor: blue,
+      backgroundColor: pink,
     },
     outline: {
       color: blue,

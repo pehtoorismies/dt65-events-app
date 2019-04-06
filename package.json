@@ -35,6 +35,7 @@
     "@babel/core": "^7.4.3",
     "@storybook/addon-actions": "^5.0.6",
     "@storybook/addon-links": "^5.0.6",
+    "@storybook/addon-viewport": "^5.0.6",
     "@storybook/addons": "^5.0.6",
     "@storybook/react": "^5.0.6",
     "babel-loader": "^8.0.5",
@@ -44,6 +45,7 @@
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
-    "eslint-plugin-unicorn": "^8.0.1"
+    "eslint-plugin-unicorn": "^8.0.1",
+    "flow-bin": "^0.96.0"
   }
 }

@@ -12,7 +12,7 @@ const withGlobalStyles = storyFn => (
     <ThemeProvider theme={theme}>
       <div
         style={{
-          backgroundColor: '#dfdfdf',
+          // backgroundColor: '#dfdfdf',
         }}
       >
         {storyFn()}
