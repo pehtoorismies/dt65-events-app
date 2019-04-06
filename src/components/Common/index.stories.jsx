@@ -3,9 +3,9 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { Button } from './index';
+import { Button, Input, ErrorText } from './index';
 
-storiesOf('Button', module)
+storiesOf('Common/Button', module)
   .add('primary', () => (
     <Button variant="primary" onClick={action('clicked')}>
       Hello Button
@@ -16,3 +16,13 @@ storiesOf('Button', module)
       Hello Button
     </Button>
   ));
+storiesOf('Common/Text', module).add('ErrorText', () => (
+  <ErrorText>This is error</ErrorText>
+));
+storiesOf('Common/Input', module).add('value', () => (
+  <Input value="Moi"></Input>
+)).add('placeholder', () => (
+  <Input value="" placeholder="This is placeholder"></Input>
+)).add('password', () => (
+  <Input value="sadfasfd" type="password" ></Input>
+));

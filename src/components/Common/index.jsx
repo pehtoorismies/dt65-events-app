@@ -1,5 +1,5 @@
 import Button from './Button';
+import Input from './Input';
+import ErrorText from './ErrorText';
 
-export {
-  Button,
-}
+export { Button, ErrorText, Input };
