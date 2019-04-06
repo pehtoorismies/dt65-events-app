@@ -35,7 +35,7 @@ const PlainLoginForm = (props: Props) => {
 
   return (
     <Box>
-      <Heading py={3} color="black" textAlign="center">
+      <Heading py={3} color="black" textAlign="center" fontWeight={700}>
         Kirjaudu
       </Heading>
       <form onSubmit={handleSubmit}>
@@ -50,7 +50,7 @@ const PlainLoginForm = (props: Props) => {
           error={errors.email}
           required
         />
-        
+
         <FormField
           name="password"
           label="Salasana"
@@ -74,7 +74,9 @@ const PlainLoginForm = (props: Props) => {
           </Button>
         </Flex>
       </form>
-      <TextLink m={2} textAlign="center">Unohdin salasanani</TextLink>
+      <TextLink m={2} textAlign="center">
+        Unohdin salasanani
+      </TextLink>
     </Box>
   );
 };
@@ -89,7 +91,6 @@ const LoginForm = withFormik({
       .email('Tarkista muoto')
       .required('Pakollinen kenttä'),
     password: Yup.string().required('Pakollinen kenttä'),
-
   }),
   handleSubmit: (values, props) => {
     const {

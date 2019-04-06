@@ -6,6 +6,7 @@ import { colors } from '../../util/themeAx'
 const TextLink = styled(Text)`
   color: ${colors('lightgray')};
   cursor: pointer;
+  font-weight: 700;
 `;
 
 export default TextLink;
