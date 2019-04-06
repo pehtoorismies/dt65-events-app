@@ -11860,6 +11860,14 @@ styled-components@^4.2.0:
     stylis-rule-sheet "^0.0.10"
     supports-color "^5.5.0"
 
+styled-icons@^7.9.0:
+  version "7.9.0"
+  resolved "https://registry.yarnpkg.com/styled-icons/-/styled-icons-7.9.0.tgz#7c442efbce96ccf73f67732f3c2c3d6b82181b0e"
+  integrity sha512-r4gHDrnaTPl2E/n7HnghUx8WqBAUGPgIOgKC2q3RSg4QaBL/rAwcKI+V+BIIEpo5GgzPIxVgsRk4giCA5k6tgw==
+  dependencies:
+    "@emotion/is-prop-valid" "^0.7.3"
+    tslib "^1.9.3"
+
 styled-reset@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/styled-reset/-/styled-reset-2.0.5.tgz#7fd1ab89f9842e577d20b70524cdf88dc9e213ac"

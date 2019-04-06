@@ -11,3 +11,11 @@ export type FormikBag = {
   loading: boolean,
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void,
 };
+
+export type ID = number | string;
+
+export type MenuItem = {
+  id: ID,
+  title: string,
+  link: string,
+}
