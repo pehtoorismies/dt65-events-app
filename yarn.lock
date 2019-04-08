@@ -10313,6 +10313,11 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-animated-burgers@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/react-animated-burgers/-/react-animated-burgers-1.2.6.tgz#9a1333781301e7b4fbc3022b8144061a81d198ed"
+  integrity sha512-Djcy/ysbm8Wt3mYtpwUxn7q5AX1kAaihbbNdI4SsLg2cnStwPGlb6vhmcoL/waoUJmQBoE0TMdyaVxxEIKLn2A==
+
 react-app-polyfill@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/react-app-polyfill/-/react-app-polyfill-0.2.2.tgz#a903b61a8bfd9c5e5f16fc63bebe44d6922a44fb"

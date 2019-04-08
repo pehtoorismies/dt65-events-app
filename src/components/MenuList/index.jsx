@@ -1,17 +1,11 @@
 // @flow
-
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Text } from 'rebass';
+import { Flex, Text } from 'rebass';
 import { map } from 'ramda';
-import { Close } from 'styled-icons/material/Close';
+import { HamburgerStandReverse } from 'react-animated-burgers';
 import type { MenuItem } from '../../flow-types';
 import { colors } from '../../util/themeAx';
-
-const CloseIcon = styled(Close)`
-  color: ${colors('black')};
-  height: 40px;
-`;
 
 type Props = {
   menuItems: MenuItem[],
@@ -19,22 +13,30 @@ type Props = {
 };
 
 const Menu = styled(Flex)`
-  border-bottom: 1px solid ${colors('black')};
+  /* border-bottom: 1px solid ${colors('white')}; */
+  /* border-top: 1px solid ${colors('white')}; */
 `;
 const MenuText = styled(Text)`
   text-transform: uppercase;
 `;
 
+const Menubar = styled(Flex)`
+  height: 80px;
+`;
+const MenuBox = styled(Flex)`
+  position: fixed;
+  right: ${props => (props.isActive ? 0 : -300)}px;
+  top: 80px;
+  transition-property: right;
+  transition-duration: 0.5s;
+  z-index: 20;
+`;
+
 const renderMenuItem = clicked => (menuItem: MenuItem) => {
   const { link, title, id } = menuItem;
   return (
-    <Menu
-      key={id}
-      onClick={() => clicked(link)}
-      justifyContent="center"
-      alignItems="center"
-    >
-      <MenuText color="black" fontWeight={700} py={3} fontSize={3}>
+    <Menu ml={3} key={id} onClick={() => clicked(link)} width="100%">
+      <MenuText color="white" fontWeight={700} py={3} fontSize={3}>
         {title}
       </MenuText>
     </Menu>
@@ -43,15 +45,21 @@ const renderMenuItem = clicked => (menuItem: MenuItem) => {
 
 const MenuList = (props: Props) => {
   const { menuItems, onMenuItemClick } = props;
+  const [isActive, setActive] = useState(false);
   const menuRenderer = renderMenuItem(onMenuItemClick);
   return (
-    <Box bg="pink" flexDirection>
-      <Flex p={3} bg="brown" justifyContent="flex-end">
-        <CloseIcon />
-      </Flex>
-
-      {map(menuRenderer, menuItems)}
-    </Box>
+    <React.Fragment>
+      <Menubar bg="pink" justifyContent="flex-end">
+        <HamburgerStandReverse
+          barColor="white"
+          isActive={isActive}
+          toggleButton={() => setActive(!isActive)}
+        />
+      </Menubar>
+      <MenuBox bg="pink" flexDirection="column" width={300} isActive={isActive}>
+        {map(menuRenderer, menuItems)}
+      </MenuBox>
+    </React.Fragment>
   );
 };
 
