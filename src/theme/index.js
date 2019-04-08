@@ -35,6 +35,11 @@ const theme = {
       backgroundColor: 'transparent',
       boxShadow: 'inset 0 0 0 2px',
     },
+    outlinePrimary: {
+      color: pink,
+      backgroundColor: 'transparent',
+      boxShadow: 'inset 0 0 0 2px',
+    },
   },
 };
 

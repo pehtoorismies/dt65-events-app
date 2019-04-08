@@ -19,3 +19,5 @@ export type MenuItem = {
   title: string,
   link: string,
 };
+
+export type EventType = "running" | "cycling" | "orienteering";

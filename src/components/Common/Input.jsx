@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import {colors} from '../../util/themeAx';
 
-
 const Input = styled.input`
   width: 100%;
   height: ${props => props.height}px;
