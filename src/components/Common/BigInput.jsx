@@ -6,7 +6,7 @@ const BigInput = styled.input`
   height: ${props => props.height}px;
   padding: 5px;
   border: 0;
-  border-bottom: 2px solid ${colors('lightgray')};
+  /* border-bottom: 2px solid ${colors('lightgray')}; */
   background: none;
   outline: none;
   color: #2c1917;
@@ -14,8 +14,9 @@ const BigInput = styled.input`
   font-size: 30px;
   font-family: 'Exo', 'sans serif';
   font-weight: bold;
+  text-align: center; 
   &:focus {
-    border-bottom: 2px solid ${colors('lightgray')};
+    /* border-bottom: 2px solid ${colors('lightgray')}; */
   }
   ::placeholder {
     font-weight: bold;

@@ -3,25 +3,33 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { map } from 'ramda';
 import { CheckCircle } from 'styled-icons/fa-regular/CheckCircle';
-import { Flex, Text } from 'rebass';
-import { Title } from './Common';
+import { Flex, Text, Box } from 'rebass';
 import { colors } from '../../../util/themeAx';
 
-import type { EventType as ET } from '../../../flow-types';
+import type {
+  EventCategory,
+  EventType,
+  EventCatergoryClick,
+} from '../../../flow-types';
 
-type Event = {
-  type: ET,
-  title: string,
-};
-type EventClick = (type: ET) => void;
 type Props = {
-  onEventClick: EventClick,
-  events: Event[],
-  preSelected: ET,
+  onEventClick: EventCatergoryClick,
+  eventTypes: EventType[],
+  preSelected: EventCategory,
 };
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 3fr));
+  justify-items: center;
+  grid-gap: 5px;
+  width: 100%;
+`;
 
 const EvtButton = styled(Flex)`
   cursor: pointer;
+  border-radius: 8px;
+  height: 50px;
 `;
 
 const CheckMark = styled(CheckCircle)`
@@ -31,25 +39,25 @@ const CheckMark = styled(CheckCircle)`
   transition-duration: 0.2s;
 `;
 
-const renderEvent = (onClick: EventClick, preSelected: ET) => (
-  event: Event
-) => {
+const renderEvent = (
+  onClick: EventCatergoryClick,
+  preSelected: EventCategory
+) => (event: EventType) => {
   const { title, type } = event;
   const selected = preSelected === type;
   const bgColor = selected ? 'pink' : 'blue';
 
   return (
     <EvtButton
-      m={1}
       p={3}
       alignItems="center"
       justifyContent="center"
       bg={bgColor}
       key={type}
       onClick={() => onClick(type)}
-      width="100%"
+      width={150}
     >
-      <Text mr={2} color="white">
+      <Text mr={2} color="white" fontWeight="bold">
         {title}
       </Text>
       <CheckMark selected={selected} />
@@ -57,22 +65,25 @@ const renderEvent = (onClick: EventClick, preSelected: ET) => (
   );
 };
 
-const EventType = (props: Props) => {
-  const { onEventClick, events, preSelected } = props;
+const EventTypeSelector = (props: Props) => {
+  const { onEventClick, eventTypes, preSelected } = props;
   const [selectedType, setSelectedType] = useState(preSelected);
 
-  const onClick = evt => {
-    setSelectedType(evt);
-    setTimeout(() => onEventClick(evt), 300);
+  const onClick = cat => {
+    setSelectedType(cat);
+    onEventClick(cat);
   };
 
   const eventRenderer = renderEvent(onClick, selectedType);
+
   return (
-    <Flex flexDirection="column" justifyContent="center" alignItems="center">
-      <Title>Tapahtumatyyppi</Title>
-      {map(eventRenderer, events)}
-    </Flex>
+    <Box width="100%" >
+      <Text width="100%" color="darkgrey" m={2}>
+        tyyppi
+      </Text>
+      <Grid>{map(eventRenderer, eventTypes)}</Grid>
+    </Box>
   );
 };
 
-export default EventType;
+export default EventTypeSelector;

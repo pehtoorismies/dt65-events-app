@@ -20,4 +20,11 @@ export type MenuItem = {
   link: string,
 };
 
-export type EventType = "running" | "cycling" | "orienteering";
+export type EventCategory = "running" | "cycling" | "orienteering";
+
+export type EventType = {
+  type: EventCategory,
+  title: string,
+};
+
+export type EventCatergoryClick = (type: EventCategory) => void;
