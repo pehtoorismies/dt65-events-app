@@ -9,7 +9,7 @@ import FormField from '../FormField';
 import type { FormikBag, HandleSubmit } from '../../../flow-types';
 
 type vals = {
-  email: string,
+  username: string,
   password: string,
 };
 type Props = {
@@ -33,7 +33,7 @@ const PlainLoginForm = (props: Props) => {
     handleSubmit,
     loading,
     isSubmitting,
-    onForgotPasswordClick
+    onForgotPasswordClick,
   } = props;
 
   return (
@@ -43,14 +43,14 @@ const PlainLoginForm = (props: Props) => {
       </Heading>
       <form onSubmit={handleSubmit}>
         <FormField
-          name="email"
-          type="email"
-          label="Sähköposti"
-          placeholder="user@example.com"
-          value={values.email}
+          name="username"
+          type="username"
+          label="Köyttäjätunnus (ei sähköposti)"
+          placeholder="metsäsika65"
+          value={values.username}
           onChange={handleChange}
           onBlur={handleBlur}
-          error={errors.email}
+          error={errors.username}
           required
         />
 
@@ -90,9 +90,7 @@ const LoginForm = withFormik({
     return { email, username };
   },
   validationSchema: Yup.object().shape({
-    email: Yup.string()
-      .email('Tarkista muoto')
-      .required('Pakollinen kenttä'),
+    username: Yup.string().required('Pakollinen kenttä'),
     password: Yup.string().required('Pakollinen kenttä'),
   }),
   handleSubmit: (values, props) => {

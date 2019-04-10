@@ -12,6 +12,13 @@ const menuItems = [
   { id: 4, link: '/joku', title: 'title' },
 ];
 
-storiesOf('MenuList', module).add('closed', () => (
-  <MenuList menuItems={menuItems} onClick={action('clicked')} />
-));
+storiesOf('MenuList', module)
+  .add('closed', () => (
+    <MenuList menuItems={menuItems} onClick={action('clicked')} />
+  ))
+  .add('empty', () => (
+    <MenuList menuItems={[]} onClick={action('clicked')} />
+  ))
+  .add('null', () => (
+    <MenuList menuItems={null} onClick={action('clicked')} />
+  ));

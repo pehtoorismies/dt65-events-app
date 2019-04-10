@@ -10,6 +10,7 @@ export type FormikBag = {
   isSubmitting: boolean,
   loading: boolean,
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void,
+  setSubmitting: (value: boolean) => void,
 };
 
 export type ID = number | string;
@@ -17,7 +18,6 @@ export type ID = number | string;
 export type MenuItem = {
   id: ID,
   title: string,
-  link: string,
 };
 
 export type EventCategory = "running" | "cycling" | "orienteering";

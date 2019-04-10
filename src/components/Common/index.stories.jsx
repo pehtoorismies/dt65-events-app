@@ -11,6 +11,11 @@ storiesOf('Common/Button', module)
       Hello Button
     </Button>
   ))
+  .add('primary - disabled', () => (
+    <Button disabled variant="primary" onClick={action('clicked')}>
+      Hello Button Disabled
+    </Button>
+  ))
   .add('outline', () => (
     <Button variant="outline" onClick={action('clicked')}>
       Hello Button

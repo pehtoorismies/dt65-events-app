@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { Flex, Text } from 'rebass';
 import { map } from 'ramda';
 import { HamburgerStandReverse } from 'react-animated-burgers';
-import type { MenuItem } from '../../flow-types';
+import type { MenuItem, ID } from '../../flow-types';
 import { colors } from '../../util/themeAx';
 
 type Props = {
   menuItems?: MenuItem[],
-  onMenuItemClick: (link: string, history: any) => void,
+  onMenuItemClick: (id: ID, history: any) => void,
 };
 
 const Menu = styled(Flex)`
@@ -33,9 +33,9 @@ const MenuBox = styled(Flex)`
 `;
 
 const renderMenuItem = clicked => (menuItem: MenuItem) => {
-  const { link, title, id } = menuItem;
+  const { title, id } = menuItem;
   return (
-    <Menu ml={3} key={id} onClick={() => clicked(link)} width="100%">
+    <Menu ml={3} key={id} onClick={() => clicked(id)} width="100%">
       <MenuText color="white" fontWeight={700} py={3} fontSize={3}>
         {title}
       </MenuText>
@@ -47,10 +47,19 @@ const MenuList = (props: Props) => {
   const { menuItems, onMenuItemClick } = props;
   const [isActive, setActive] = useState(false);
 
-  const onClick = link => {
+  const onClick = id => {
     setActive(false);
-    onMenuItemClick(link);
+    onMenuItemClick(id);
   };
+
+  const showMenuIcon = menuItems && menuItems.length > 0;
+  const menuIcon = showMenuIcon ? (
+    <HamburgerStandReverse
+      barColor="white"
+      isActive={isActive}
+      toggleButton={() => setActive(!isActive)}
+    />
+  ) : null;
 
   const menuRenderer = renderMenuItem(onClick);
   return (
@@ -59,14 +68,10 @@ const MenuList = (props: Props) => {
         <Text ml={2} color="white" fontWeight={700}>
           DT65 Events
         </Text>
-        <HamburgerStandReverse
-          barColor="white"
-          isActive={isActive}
-          toggleButton={() => setActive(!isActive)}
-        />
+        {menuIcon}
       </Menubar>
       <MenuBox bg="pink" flexDirection="column" width={300} isActive={isActive}>
-        {map(menuRenderer, menuItems)}
+        {map(menuRenderer, menuItems || [])}
       </MenuBox>
     </React.Fragment>
   );

@@ -16,6 +16,7 @@ const StyledButton = styled(Button)`
   font-size: 16px;
   cursor: pointer;
   text-transform: uppercase;
+
 `;
 
 Button.defaultProps = {
