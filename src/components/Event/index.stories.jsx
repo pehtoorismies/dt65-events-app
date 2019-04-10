@@ -5,7 +5,18 @@ import { action } from '@storybook/addon-actions'; // eslint-disable-line
 import EventTypeSelector from './Creator/EventTypeSelector';
 import EventDateSelector from './Creator/EventDateSelector';
 import Creator from './Creator';
+import EventBox from './EventBox';
 import { EVENT_TYPES } from '../../constants';
+
+const event = {
+  id: 1,
+  name: 'Raatojuoksu Raatojuoksu Raatojuoksu Raatojuoksu ',
+  date: new Date(),
+  race: true,
+  time: '10:00',
+};
+
+storiesOf('Event/Listing', module).add('box', () => <EventBox event={event} />);
 
 storiesOf('Event/Creator', module)
   .add('type', () => (
