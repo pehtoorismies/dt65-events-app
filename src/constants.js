@@ -35,4 +35,12 @@ const EVENT_TYPES = [
 
 const WEEK_DAYS = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
 
-export { EVENT_TYPES, WEEK_DAYS };
+const ROUTES = {
+  login: '/login',
+  home: '/',
+  profile: '/profile',
+  events: '/events',
+  forgotPassword: '/forgot-password',
+};
+
+export { EVENT_TYPES, WEEK_DAYS, ROUTES };

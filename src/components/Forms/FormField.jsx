@@ -2,13 +2,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ErrorText, Input } from '../Common';
+import { colors } from '../../util/themeAx';
 
 type Props = {
   label: string,
   error?: string,
 };
 
-const Wrapper = styled.label`
+const Wrapper = styled.div`
   display: block;
   margin-top: 5px;
 `;
@@ -16,8 +17,7 @@ const Span = styled.span`
   font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
-  /* color: $text-color; */
-  color: #999;
+  color: ${colors('lightgray')};
 `;
 
 const FormField = (props: Props) => {

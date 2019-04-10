@@ -28,3 +28,5 @@ export type EventType = {
 };
 
 export type EventCatergoryClick = (type: EventCategory) => void;
+
+export type HandleSubmit = (values: any, formikBag: FormikBag) => void;

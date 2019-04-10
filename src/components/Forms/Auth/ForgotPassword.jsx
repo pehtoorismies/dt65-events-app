@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { omit } from 'ramda';
 import { Button, TextLink } from '../../Common';
 import FormField from '../FormField';
-import type { FormikBag } from '../../../flow-types';
+import type { FormikBag, HandleSubmit } from '../../../flow-types';
 
 type vals = {
   email: string,
@@ -19,6 +19,8 @@ type Props = {
   errors: {
     ...vals,
   },
+  onLoginClick: () => void,
+  handleFormSubmit: HandleSubmit,
 };
 
 const PlainForgotPasswordForm = (props: Props) => {
@@ -30,12 +32,13 @@ const PlainForgotPasswordForm = (props: Props) => {
     handleSubmit,
     loading,
     isSubmitting,
+    onLoginClick,
   } = props;
 
   return (
     <Box>
-      <Heading py={3} color="black" textAlign="center">
-        Unohdin salasanani
+      <Heading py={3} color="black" textAlign="center" fontWeight={700}>
+        UNOHTUNUT SALASANA
       </Heading>
       <form onSubmit={handleSubmit}>
         <FormField
@@ -62,7 +65,9 @@ const PlainForgotPasswordForm = (props: Props) => {
           </Button>
         </Flex>
       </form>
-      <TextLink m={2} textAlign="center">Kirjatumiseen</TextLink>
+      <TextLink onClick={onLoginClick} m={2} textAlign="center">
+        Kirjatumiseen
+      </TextLink>
     </Box>
   );
 };
@@ -76,15 +81,14 @@ const ForgotPasswordForm = withFormik({
     email: Yup.string()
       .email('Tarkista muoto')
       .required('Pakollinen kenttä'),
-
   }),
   handleSubmit: (values, props) => {
     const {
-      props: { handleSubmit },
+      props: { handleFormSubmit },
     } = props;
 
     const formigBag: FormikBag = omit(['props'], props);
-    handleSubmit(values, formigBag);
+    handleFormSubmit(values, formigBag);
   },
 
   displayName: 'ForgotPasswordForm',

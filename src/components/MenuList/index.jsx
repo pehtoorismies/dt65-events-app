@@ -8,8 +8,8 @@ import type { MenuItem } from '../../flow-types';
 import { colors } from '../../util/themeAx';
 
 type Props = {
-  menuItems: MenuItem[],
-  onMenuItemClick: (link: string) => void,
+  menuItems?: MenuItem[],
+  onMenuItemClick: (link: string, history: any) => void,
 };
 
 const Menu = styled(Flex)`
@@ -46,10 +46,19 @@ const renderMenuItem = clicked => (menuItem: MenuItem) => {
 const MenuList = (props: Props) => {
   const { menuItems, onMenuItemClick } = props;
   const [isActive, setActive] = useState(false);
-  const menuRenderer = renderMenuItem(onMenuItemClick);
+
+  const onClick = link => {
+    setActive(false);
+    onMenuItemClick(link);
+  };
+
+  const menuRenderer = renderMenuItem(onClick);
   return (
     <React.Fragment>
-      <Menubar bg="pink" justifyContent="flex-end">
+      <Menubar bg="pink" alignItems="center" justifyContent="space-between">
+        <Text ml={2} color="white" fontWeight={700}>
+          DT65 Events
+        </Text>
         <HamburgerStandReverse
           barColor="white"
           isActive={isActive}
@@ -61,6 +70,10 @@ const MenuList = (props: Props) => {
       </MenuBox>
     </React.Fragment>
   );
+};
+
+MenuList.defaultProps = {
+  menuItems: [],
 };
 
 export default MenuList;

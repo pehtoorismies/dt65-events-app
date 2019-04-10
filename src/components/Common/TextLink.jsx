@@ -7,6 +7,7 @@ const TextLink = styled(Text)`
   color: ${colors('lightgray')};
   cursor: pointer;
   font-weight: 700;
+  user-select: none;
 `;
 
 export default TextLink;

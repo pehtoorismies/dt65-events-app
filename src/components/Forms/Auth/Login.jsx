@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { omit } from 'ramda';
 import { Button, TextLink } from '../../Common';
 import FormField from '../FormField';
-import type { FormikBag } from '../../../flow-types';
+import type { FormikBag, HandleSubmit } from '../../../flow-types';
 
 type vals = {
   email: string,
@@ -20,6 +20,8 @@ type Props = {
   errors: {
     ...vals,
   },
+  onForgotPasswordClick: () => void,
+  handleFormSubmit: HandleSubmit,
 };
 
 const PlainLoginForm = (props: Props) => {
@@ -31,12 +33,13 @@ const PlainLoginForm = (props: Props) => {
     handleSubmit,
     loading,
     isSubmitting,
+    onForgotPasswordClick
   } = props;
 
   return (
     <Box>
       <Heading py={3} color="black" textAlign="center" fontWeight={700}>
-        Kirjaudu
+        KIRJAUDU
       </Heading>
       <form onSubmit={handleSubmit}>
         <FormField
@@ -74,7 +77,7 @@ const PlainLoginForm = (props: Props) => {
           </Button>
         </Flex>
       </form>
-      <TextLink m={2} textAlign="center">
+      <TextLink onClick={onForgotPasswordClick} m={2} textAlign="center">
         Unohdin salasanani
       </TextLink>
     </Box>
@@ -94,11 +97,11 @@ const LoginForm = withFormik({
   }),
   handleSubmit: (values, props) => {
     const {
-      props: { handleSubmit },
+      props: { handleFormSubmit },
     } = props;
 
     const formigBag: FormikBag = omit(['props'], props);
-    handleSubmit(values, formigBag);
+    handleFormSubmit(values, formigBag);
   },
 
   displayName: 'LoginForm',
