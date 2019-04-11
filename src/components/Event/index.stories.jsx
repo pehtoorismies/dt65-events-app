@@ -6,17 +6,25 @@ import EventTypeSelector from './Creator/EventTypeSelector';
 import EventDateSelector from './Creator/EventDateSelector';
 import Creator from './Creator';
 import EventBox from './EventBox';
+import HeadCountButton from './HeadCountButton';
 import { EVENT_TYPES } from '../../constants';
 
 const event = {
   id: 1,
-  name: 'Raatojuoksu Raatojuoksu Raatojuoksu Raatojuoksu ',
+  name: 'Raatojuoksu',
   date: new Date(),
   race: true,
   time: '10:00',
+  participants: [
+    { username: 'koira', id: 1 },
+    { username: 'kissa', id: 2 },
+    { username: 'heppa', id: 3 },
+  ],
 };
 
-storiesOf('Event/Listing', module).add('box', () => <EventBox event={event} />);
+storiesOf('Event/Listing', module)
+  .add('box', () => <EventBox event={event} />)
+  .add('count', () => <HeadCountButton count={99} onClick={action('Click')} />);
 
 storiesOf('Event/Creator', module)
   .add('type', () => (

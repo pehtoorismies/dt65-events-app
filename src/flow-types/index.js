@@ -21,7 +21,12 @@ export type MenuItem = {
   title: string,
 };
 
-export type EventCategory = "running" | "cycling" | "orienteering";
+export type EventCategory = 'running' | 'cycling' | 'orienteering';
+
+export type Participant = {
+  username: string,
+  id: ID,
+};
 
 export type EventType = {
   type: EventCategory,
@@ -34,8 +39,8 @@ export type Event = {
   race: boolean,
   time: string,
   date: Date,
-
-}
+  participants: Participant[],
+};
 
 export type EventCatergoryClick = (type: EventCategory) => void;
 
