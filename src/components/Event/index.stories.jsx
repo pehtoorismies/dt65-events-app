@@ -19,7 +19,14 @@ const event = {
     { username: 'koira', id: 1 },
     { username: 'kissa', id: 2 },
     { username: 'heppa', id: 3 },
+    { username: 'koira', id: 4 },
+    { username: 'kissa', id: 5 },
+    { username: 'heppa', id: 6 },
+    { username: 'koira', id: 7 },
+    { username: 'kissa', id: 8 },
+    { username: 'heppa', id: 9 },
   ],
+  location: 'Raappavuori'
 };
 
 storiesOf('Event/Listing', module)

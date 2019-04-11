@@ -39,6 +39,7 @@ export type Event = {
   race: boolean,
   time: string,
   date: Date,
+  location: string,
   participants: Participant[],
 };
 

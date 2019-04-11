@@ -5,6 +5,7 @@ const red = '#FF5471';
 const lightgray = '#9a9a9a';
 const darkWhite = '#f4f4f5';
 const black = "#140D33";
+const lightBlack = "#404035";
 const pink = "#FF80EA";
 const white = "#fff";
 
@@ -20,6 +21,7 @@ const theme = {
     pink,
     white,
     darkWhite,
+    lightBlack,
   },
   space: [0, 4, 8, 16, 32, 64, 128, 256],
   // fonts: {
