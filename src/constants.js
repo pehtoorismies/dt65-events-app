@@ -44,6 +44,7 @@ const ROUTES = {
   home: '/',
   profile: '/profile',
   forgotPassword: '/forgot-password',
+  createEvent: '/create-event',
 };
 
 export { EVENT_TYPES, WEEK_DAYS, ROUTES };

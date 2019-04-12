@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
 import { map } from 'ramda';
 import { CheckCircle } from 'styled-icons/fa-regular/CheckCircle';
@@ -76,14 +76,7 @@ const EventTypeSelector = (props: Props) => {
 
   const eventRenderer = renderEvent(onClick, selectedType);
 
-  return (
-    <Box width="100%" >
-      <Text width="100%" color="darkgrey" m={2}>
-        tyyppi
-      </Text>
-      <Grid>{map(eventRenderer, eventTypes)}</Grid>
-    </Box>
-  );
+  return <Grid>{map(eventRenderer, eventTypes)}</Grid>;
 };
 
 export default EventTypeSelector;

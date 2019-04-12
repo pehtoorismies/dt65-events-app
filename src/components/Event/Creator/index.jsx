@@ -3,11 +3,13 @@ import React from 'react';
 import { Flex, Box, Text } from 'rebass';
 import { ErrorMessage, withFormik } from 'formik';
 import * as Yup from 'yup';
+import styled from 'styled-components';
 import { Title } from './Common';
 import { BigInput, Button } from '../../Common';
 import EventTypeSelector from './EventTypeSelector';
 import EventDateSelector from './EventDateSelector';
 import { EVENT_TYPES } from '../../../constants';
+import { colors } from '../../../util/themeAx';
 
 import type { EventCategory, FormikBag } from '../../../flow-types';
 
@@ -41,6 +43,11 @@ const CustomError = ({ children }) => {
   );
 };
 
+const Divider = styled.div`
+  border-top: 1px solid ${colors('lightgray')};
+  margin-bottom: 8px;
+`;
+
 const Creator = (props: Props) => {
   const {
     values,
@@ -57,11 +64,14 @@ const Creator = (props: Props) => {
       flexDirection="column"
       alignItems="center"
       justifyContert="space-between"
-      width="100%"
     >
       <Title>Luo tapahtuma</Title>
       <form onSubmit={handleSubmit}>
-        <Box m={2} width="100%">
+        <Box>
+          <Text m={2} color="darkgrey">
+            tyyppi
+          </Text>
+          <Divider />
           <EventTypeSelector
             preSelected={values.type}
             onEventClick={category => {
@@ -74,9 +84,11 @@ const Creator = (props: Props) => {
           </Flex>
         </Box>
         <Box width="100%" m={2}>
-          <Text color="darkgrey" ml={2}>
+          <Divider />
+          <Text color="darkgrey" m={2}>
             nimi
           </Text>
+
           <Flex
             alignItems="center"
             justifyContent="center"
@@ -88,7 +100,7 @@ const Creator = (props: Props) => {
               onChange={handleChange}
               onBlur={handleBlur}
               error={errors.name}
-              placeholder="Nimi"
+              placeholder="anna nimi"
             />
             <ErrorMessage name="name" component={CustomError} />
           </Flex>
@@ -100,9 +112,11 @@ const Creator = (props: Props) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Text color="darkgrey" ml={2}>
+          <Divider />
+          <Text color="darkgrey" m={2}>
             päivämäärä
           </Text>
+
           <EventDateSelector
             onSetDateClick={date => {
               setFieldValue('date', date);
@@ -114,9 +128,10 @@ const Creator = (props: Props) => {
           </Flex>
         </Box>
         <Box width="100%" m={2}>
-          <Text color="darkgrey" ml={2}>
-            nimi
+          <Text color="darkgrey" m={2}>
+            aika
           </Text>
+          <Divider />
           <Flex
             alignItems="center"
             justifyContent="center"
@@ -128,15 +143,16 @@ const Creator = (props: Props) => {
               onChange={handleChange}
               onBlur={handleBlur}
               error={errors.name}
-              placeholder="Aika"
+              placeholder="aika 10:00.."
             />
             <ErrorMessage name="time" component={CustomError} />
           </Flex>
         </Box>
         <Box width="100%" m={2}>
-          <Text color="darkgrey" ml={2}>
+          <Text color="darkgrey" m={2}>
             osoite/paikka
           </Text>
+          <Divider />
           <Flex
             alignItems="center"
             justifyContent="center"
@@ -148,18 +164,20 @@ const Creator = (props: Props) => {
               onChange={handleChange}
               onBlur={handleBlur}
               error={errors.address}
-              placeholder="Osoite/paikka"
+              placeholder="osoite / paikka"
             />
             <ErrorMessage name="address" component={CustomError} />
           </Flex>
         </Box>
-        <Flex width="100%">
-          <Button onClick={onCancel} m={2} width={200} type="button">
+  
+        <Flex mt={4} justifyContent="center" flexWrap="wrap">
+        
+          <Button onClick={onCancel} m={2} width={130} type="button">
             Peruuta
           </Button>
           <Button
             m={2}
-            width={200}
+            width={130}
             type="submit"
             variant="primary"
             justifyContent="center"
@@ -178,7 +196,7 @@ const Formik = withFormik({
   validationSchema: Yup.object().shape({
     name: Yup.string().required('Anna tapahtuman nimi'),
     date: Yup.string().required('Anna päivämäärä'),
-    type: Yup.string().required('Anna tapahtuman aika'),
+    type: Yup.string().required('Valitse tapahtuman tyyppi'),
   }),
 
   handleSubmit: (values, formikBag) => {

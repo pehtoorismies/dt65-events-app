@@ -10,29 +10,35 @@ import MenuListContainer from './containers/MenuListContainer';
 import LoginContainer from './containers/LoginContainer';
 import ForgotPasswordContainer from './containers/ForgotPasswordContainer';
 import EventsContainer from './containers/EventsContainer';
+import CreateEventContainer from './containers/CreateEventContainer';
 import PrivateRoute from './PrivateRoute';
 import { ROUTES } from './constants';
-
-
 
 const Profile = () => {
   return <div>Profile</div>;
 };
 
-
 const App = () => (
   <Fragment>
-    
     <GlobalStyle />
     <ThemeProvider theme={theme}>
       <Router>
         <MenuListContainer />
         <ToastContainer />
-        <Box >
+        <Box>
           <Route exact path={ROUTES.login} component={LoginContainer} />
-          <Route exact path={ROUTES.forgotPassword} component={ForgotPasswordContainer} />
+          <Route
+            exact
+            path={ROUTES.forgotPassword}
+            component={ForgotPasswordContainer}
+          />
           <PrivateRoute exact path={ROUTES.home} component={EventsContainer} />
           <PrivateRoute exact path={ROUTES.profile} component={Profile} />
+          <PrivateRoute
+            exact
+            path={ROUTES.createEvent}
+            component={CreateEventContainer}
+          />
         </Box>
       </Router>
     </ThemeProvider>

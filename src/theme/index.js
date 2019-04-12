@@ -3,6 +3,7 @@ import Color from 'color';
 const blue = '#07c';
 const red = '#FF5471';
 const lightgray = '#9a9a9a';
+const lightergrey = '#E6E6E6';
 const darkWhite = '#f4f4f5';
 const black = "#140D33";
 const lightBlack = "#404035";
@@ -22,6 +23,7 @@ const theme = {
     white,
     darkWhite,
     lightBlack,
+    lightergrey
   },
   space: [0, 4, 8, 16, 32, 64, 128, 256],
   // fonts: {

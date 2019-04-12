@@ -12,7 +12,7 @@ const BigInput = styled.input`
   color: #2c1917;
   caret-color: ${colors('pink')};
   font-size: 30px;
-  font-family: 'Exo', 'sans serif';
+  font-family: 'Titillium Web', 'sans serif';
   font-weight: bold;
   text-align: center; 
   &:focus {
@@ -20,7 +20,7 @@ const BigInput = styled.input`
   }
   ::placeholder {
     font-weight: bold;
-    color: ${colors('lightgray')};
+    color: ${colors('lightergrey')};
   }
 `;
 
