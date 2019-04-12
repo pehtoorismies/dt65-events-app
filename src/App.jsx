@@ -28,7 +28,7 @@ const App = () => (
       <Router>
         <MenuListContainer />
         <ToastContainer />
-        <Box p={3}>
+        <Box >
           <Route exact path={ROUTES.login} component={LoginContainer} />
           <Route exact path={ROUTES.forgotPassword} component={ForgotPasswordContainer} />
           <PrivateRoute exact path={ROUTES.home} component={EventsContainer} />

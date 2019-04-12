@@ -31,6 +31,10 @@ const EVENT_TYPES = [
     type: 'ultras',
     title: 'Ultras',
   },
+  {
+    type: 'other',
+    title: 'Muu',
+  },
 ];
 
 const WEEK_DAYS = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];

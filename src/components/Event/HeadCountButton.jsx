@@ -9,6 +9,7 @@ import { colors } from '../../util/themeAx';
 type Props = {
   count: number,
   onClick: () => void,
+  highlighted: boolean,
 };
 
 const UserIcon = styled(User)`
@@ -26,11 +27,11 @@ const Count = styled(Flex)`
 `;
 
 const HeadCountButton = (props: Props) => {
-  const { count, onClick } = props;
+  const { count, onClick, highlighted } = props;
   return (
     <Count
       onClick={onClick}
-      bg="pink"
+      bg={highlighted ? 'pink' : 'blue'}
       flexDirection="column"
       alignItems="center"
       justifyContent="center"

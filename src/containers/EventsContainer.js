@@ -1,10 +1,11 @@
 // @flow
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { map } from 'ramda';
 import { API_URL } from '../config';
 import { ROUTES } from '../constants';
+import EventBox from '../components/Event/EventBox';
 import type { Event } from '../flow-types';
 
 type Props = {
@@ -12,8 +13,8 @@ type Props = {
 };
 
 const renderEvent = (evt: Event) => {
-  const { id, name } = evt;
-  return <div key={id}>{name}</div>;
+  const { id } = evt;
+  return <EventBox key={id} event={evt} username="kissa" />;
 };
 
 const EventsContainer = (props: Props) => {
@@ -38,13 +39,13 @@ const EventsContainer = (props: Props) => {
       .finally(() => {
         setLoading(false);
       });
-  });
+  }, []);
 
   if (loading) {
     return <h1>loading</h1>;
   }
 
-  return <div>{map(renderEvent, events)}</div>;
+  return <Fragment>{map(renderEvent, events)}</Fragment>;
 };
 
 export default withRouter(EventsContainer);

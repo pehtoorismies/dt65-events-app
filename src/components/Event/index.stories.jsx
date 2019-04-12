@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
-import { storiesOf } from '@storybook/react'; // eslint-disable-line
-import { action } from '@storybook/addon-actions'; // eslint-disable-line
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import faker from 'faker';
+import { times } from 'ramda';
 import EventTypeSelector from './Creator/EventTypeSelector';
 import EventDateSelector from './Creator/EventDateSelector';
 import Creator from './Creator';
@@ -9,29 +11,40 @@ import EventBox from './EventBox';
 import HeadCountButton from './HeadCountButton';
 import { EVENT_TYPES } from '../../constants';
 
+const createUser = id => {
+  return {
+    id,
+    username: faker.internet.userName(),
+  };
+};
+
+const numParticipants = faker.random.number(20);
+
 const event = {
   id: 1,
   name: 'Raatojuoksu',
   date: new Date(),
   race: true,
   time: '10:00',
-  participants: [
-    { username: 'koira', id: 1 },
-    { username: 'kissa', id: 2 },
-    { username: 'heppa', id: 3 },
-    { username: 'koira', id: 4 },
-    { username: 'kissa', id: 5 },
-    { username: 'heppa', id: 6 },
-    { username: 'koira', id: 7 },
-    { username: 'kissa', id: 8 },
-    { username: 'heppa', id: 9 },
-  ],
-  location: 'Raappavuori'
+  participants: times(createUser, numParticipants),
+  location: 'Raappavuori',
 };
 
+const idx = faker.random.number(numParticipants - 1);
+
 storiesOf('Event/Listing', module)
-  .add('box', () => <EventBox event={event} />)
-  .add('count', () => <HeadCountButton count={99} onClick={action('Click')} />);
+  .add('box not participating', () => (
+    <EventBox username="someUser" event={event} />
+  ))
+  .add('box is participating', () => (
+    <EventBox username={event.participants[idx].username} event={event} />
+  ))
+  .add('count', () => (
+    <HeadCountButton highlighted={false} count={99} onClick={action('Click')} />
+  ))
+  .add('count - highlited', () => (
+    <HeadCountButton highlighted count={99} onClick={action('Click')} />
+  ));
 
 storiesOf('Event/Creator', module)
   .add('type', () => (
