@@ -24,8 +24,10 @@ const event = {
   id: 1,
   name: 'Raatojuoksu',
   date: new Date(),
+  dateString: '12.12.2019',
   race: true,
   time: '10:00',
+  eventType: 'running',
   participants: times(createUser, numParticipants),
   location: 'Raappavuori',
 };
@@ -34,10 +36,18 @@ const idx = faker.random.number(numParticipants - 1);
 
 storiesOf('Event/Listing', module)
   .add('box not participating', () => (
-    <EventBox username="someUser" event={event} />
+    <EventBox
+      onParticipateClick={action('Part')}
+      username="someUser"
+      event={event}
+    />
   ))
   .add('box is participating', () => (
-    <EventBox username={event.participants[idx].username} event={event} />
+    <EventBox
+      onParticipateClick={action('Part')}
+      username={event.participants[idx].username}
+      event={event}
+    />
   ))
   .add('count', () => (
     <HeadCountButton highlighted={false} count={99} onClick={action('Click')} />
