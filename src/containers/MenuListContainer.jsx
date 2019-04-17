@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { find, propEq } from 'ramda';
+import { find, propEq, filter, reject } from 'ramda';
 import MenuList from '../components/MenuList';
 import { ROUTES } from '../constants';
 import { logout, isAuthenticated } from '../util/auth';
@@ -14,22 +14,40 @@ type Props = {
 
 const menuItems = [
   {
-    id: 1,
+    id: 5,
+    title: 'Kirjaudu',
+    action: history => history.push(ROUTES.login),
+    public: true,
+  },
+  {
+    id: 7,
+    title: 'Unohdin salasanani',
+    action: history => history.push(ROUTES.forgotPassword),
+    public: true,
+  },
+  {
+    id: 10,
+    title: 'Rekisteröidy',
+    action: history => history.push(ROUTES.register),
+    public: true,
+  },
+  {
+    id: 20,
     title: 'Tapahtumat',
     action: history => history.push(ROUTES.home),
   },
   {
-    id: 2,
+    id: 30,
     title: 'Luo tapahtuma',
     action: history => history.push(ROUTES.createEvent),
   },
   {
-    id: 3,
+    id: 40,
     title: 'Profiili',
     action: history => history.push(ROUTES.profile),
   },
   {
-    id: 4,
+    id: 50,
     title: 'Logout',
     action: history => {
       logout();
@@ -37,6 +55,15 @@ const menuItems = [
     },
   },
 ];
+
+const isPublicFilter = menuItem => !!menuItem.public;
+
+const filterMenus = (isAuth, menus) => {
+  if (isAuth) {
+    return reject(isPublicFilter, menus)
+  }
+  return filter(isPublicFilter, menus)
+}
 
 const MenuListContainer = (props: Props) => {
   const { history: h } = props;
@@ -48,7 +75,8 @@ const MenuListContainer = (props: Props) => {
     }
     menuItem.action(h);
   };
-  const menus = isAuthenticated() ? menuItems : [];
+  
+  const menus = filterMenus(isAuthenticated(), menuItems);
 
   return <MenuList menuItems={menus} onMenuItemClick={onMenuItemClick} />;
 };

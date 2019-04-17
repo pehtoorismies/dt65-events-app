@@ -41,6 +41,7 @@ const WEEK_DAYS = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
 
 const ROUTES = {
   login: '/login',
+  register: '/register',
   home: '/',
   profile: '/profile',
   forgotPassword: '/forgot-password',
