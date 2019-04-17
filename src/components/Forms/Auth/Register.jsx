@@ -97,6 +97,16 @@ const PlainRegisterForm = (props: Props) => {
           onBlur={handleBlur}
           error={errors.passwordRepeat}
         />
+        <FormField
+          name="registerSecret"
+          label="Seuran koodi"
+          placeholder="seuran koodi"
+          type="password"
+          value={values.registerSecret}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.registerSecret}
+        />
         <Flex justifyContent="center">
           <Button
             m={2}

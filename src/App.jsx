@@ -31,12 +31,13 @@ const App = () => (
           <ToastContainer />
           <Box>
             <Route exact path={ROUTES.login} component={LoginContainer} />
-            <Route exact path={ROUTES.register} component={RegisterContainer} />
+            
             <Route
               exact
               path={ROUTES.forgotPassword}
               component={ForgotPasswordContainer}
             />
+            <Route exact path={ROUTES.register} component={RegisterContainer} />
             <PrivateRoute
               exact
               path={ROUTES.home}

@@ -1,61 +1,61 @@
 // @flow
 import React from 'react';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
-import { path } from 'ramda';
-import { toast } from 'react-toastify';
-import Login from '../components/Forms/Auth/Login';
+import RegisterCmp from '../components/Forms/Auth/Register';
 import { ROUTES } from '../constants';
-import { API_URL } from '../config';
-import { login } from '../util/auth';
-import type { FormikBag } from '../flow-types';
 
-const statusPath = path(['response', 'status']);
-
+const REGISTER = gql`
+  mutation Register(
+    $name: String!
+    $email: String!
+    $password: String!
+    $username: String!
+    $registerSecret: String!
+  ) {
+    register(
+      name: $name
+      email: $email
+      password: $password
+      username: $username
+      registerSecret: $registerSecret
+    ) {
+      id
+    }
+  }
+`;
 type Props = {
   history: any,
 };
 
-const LoginContainer = (props: Props) => {
+const RegisterContainer = (props: Props) => {
   const { history: h } = props;
 
-  const handleFormSubmit = (values: any, formikBag: FormikBag) => {
-    const url = `${API_URL}/auth/login`;
-    axios
-      .post(url, values)
-      .then(({ data }) => {
-        login(data.token);
-        h.push(ROUTES.home);
-      })
-      .catch(error => {
-        const status = statusPath(error);
-        if (status === 401) {
-          formikBag.setFieldError(
-            'username',
-            'Käyttäjätunnus tai salasana väärin'
-          );
-          formikBag.setFieldError(
-            'password',
-            'Käyttäjätunnus tai salasana väärin'
-          );
-        } else {
-          console.error(error);
-          toast.error('Palvelussa vikaa, kokeile kohta uudelleen', {
-            position: toast.POSITION.TOP_CENTER,
-          });
-        }
-      })
-      .finally(() => {
-        formikBag.setSubmitting(false);
-      });
-  };
-
   return (
-    <Login
-      handleFormSubmit={handleFormSubmit}
-      onForgotPasswordClick={() => h.push(ROUTES.forgotPassword)}
-    />
+    <Mutation mutation={REGISTER}>
+      {(register, { data, loading, error }) => {
+        console.log('data', data);
+        console.log('loading', loading);
+        console.log('error', error);
+        if (error) {
+          console.log('error', error.message);
+          console.log('error', error.graphQLErrors);
+        }
+
+        const handleFormSubmit = (values, formikBag) => {
+          register({ variables: { ...values, registerSecret: 'koira' } });
+          console.log('Done');
+        };
+
+        return (
+          <RegisterCmp
+            handleFormSubmit={handleFormSubmit}
+            onLoginClick={() => h.push(ROUTES.login)}
+          />
+        );
+      }}
+    </Mutation>
   );
 };
-
-export default withRouter(LoginContainer);
+export default withRouter(RegisterContainer);
