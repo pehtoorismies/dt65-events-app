@@ -13,6 +13,7 @@ type Props = {
 };
 
 const Menu = styled(Flex)`
+  cursor: pointer;
   /* border-bottom: 1px solid ${colors('white')}; */
   /* border-top: 1px solid ${colors('white')}; */
 `;

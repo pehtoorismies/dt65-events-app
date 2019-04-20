@@ -15,6 +15,7 @@ type vals = {
   passwordRepeat: string,
   name: string,
   registerSecret: string,
+  general: string,
 };
 type Props = {
   ...FormikBag,
@@ -40,6 +41,7 @@ const PlainRegisterForm = (props: Props) => {
     isSubmitting,
     onLoginClick,
   } = props;
+  console.log('errors', errors);
 
   return (
     <Box>
@@ -49,6 +51,7 @@ const PlainRegisterForm = (props: Props) => {
       <Text textAlign="center">
         Täytä kaikki kentät. Rekisteröintikoodin saat seuralta.
       </Text>
+      <Text color="red">{errors.general}</Text>
       <form onSubmit={handleSubmit}>
         <FormField
           name="username"

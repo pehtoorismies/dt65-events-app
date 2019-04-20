@@ -1,10 +1,11 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import RegisterCmp from '../components/Forms/Auth/Register';
 import { ROUTES } from '../constants';
+import type { FormikBag } from '../flow-types';
 
 const REGISTER = gql`
   mutation Register(
@@ -31,21 +32,28 @@ type Props = {
 
 const RegisterContainer = (props: Props) => {
   const { history: h } = props;
+  const [formikBag, setFormikBag] = useState({});
 
   return (
     <Mutation mutation={REGISTER}>
       {(register, { data, loading, error }) => {
-        console.log('data', data);
-        console.log('loading', loading);
-        console.log('error', error);
+        // console.log('data', data);
+        // console.log('loading', loading);
+        // console.log('error', error);
         if (error) {
-          console.log('error', error.message);
-          console.log('error', error.graphQLErrors);
+          const { message, graphQLErrors, networkError } = error;
+          // console.log('message', message);
+          // console.log('graphQLErrors', graphQLErrors);
+          // console.log('networkError', networkError);
+          
+          if (formikBag && formikBag.setErrors) {
+            formikBag.setErrors({ general: 'Ooops' });
+          }
         }
 
-        const handleFormSubmit = (values, formikBag) => {
-          register({ variables: { ...values, registerSecret: 'koira' } });
-          console.log('Done');
+        const handleFormSubmit = (values: any, fb: FormikBag) => {
+          setFormikBag(fb);
+          register({ variables: values });
         };
 
         return (
