@@ -29,7 +29,7 @@ const App = () => (
         <Router>
           <MenuListContainer />
           <ToastContainer />
-          <Box>
+          <Box p={2}>
             <Route exact path={ROUTES.login} component={LoginContainer} />
             
             <Route

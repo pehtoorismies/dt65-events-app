@@ -1,28 +1,30 @@
 import ApolloClient from 'apollo-boost';
-// import jwtDecode from 'jwt-decode';
-// import { ACCESS_TOKEN, ID_TOKEN, TYPE_LOCALUSER } from './util/constants';
+import jwtDecode from 'jwt-decode';
+import { getIdToken, getAccessToken } from './auth';
 
-// const idToken = localStorage.getItem(ID_TOKEN);
+const TYPE_LOCALUSER = 'LocalUser';
 
-// const getLocalUser = token => {
-//   if (!token) {
-//     return null;
-//   }
-//   return {
-//     __typename: TYPE_LOCALUSER,
-//     username: jwtDecode(idToken).name,
-//   };
-// };
+const getLocalUser = token => {
+  if (!token) {
+    return null;
+  }
+  const decoded = jwtDecode(token);
+
+  return {
+    __typename: TYPE_LOCALUSER,
+    username: decoded.email,
+    age: 14,
+  };
+};
 
 const getAuthHeaders = () => {
-  return null;
-  // const accessToken = localStorage.getItem(ACCESS_TOKEN);
-  // if (!accessToken) {
-  //   return null;
-  // }
-  // return {
-  //   Authorization: `Bearer ${accessToken}`,
-  // };
+  const accessToken = getAccessToken();
+  if (!accessToken) {
+    return null;
+  }
+  return {
+    Authorization: `Bearer ${accessToken}`,
+  };
 };
 
 const client = new ApolloClient({
@@ -30,7 +32,7 @@ const client = new ApolloClient({
   headers: getAuthHeaders(),
   clientState: {
     defaults: {
-      // localUser: getLocalUser(idToken),
+      localUser: getLocalUser(getIdToken()),
     },
   },
   request: operation => {

@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { omit } from 'ramda';
 import { Button, TextLink } from '../../Common';
 import FormField from '../FormField';
-import type { FormikBag, HandleSubmit } from '../../../flow-types';
+import type { FormikBag } from '../../../flow-types';
 
 type vals = {
   username: string,
@@ -21,7 +21,6 @@ type Props = {
     ...vals,
   },
   onForgotPasswordClick: () => void,
-  handleFormSubmit: HandleSubmit,
 };
 
 const PlainLoginForm = (props: Props) => {
@@ -45,7 +44,7 @@ const PlainLoginForm = (props: Props) => {
         <FormField
           name="username"
           type="username"
-          label="Köyttäjätunnus (ei sähköposti)"
+          label="Käyttäjätunnus (ei sähköposti)"
           placeholder="metsäsika65"
           value={values.username}
           onChange={handleChange}
@@ -84,25 +83,18 @@ const PlainLoginForm = (props: Props) => {
   );
 };
 
-const LoginForm = withFormik({
-  mapPropsToValues: props => {
-    const { email, username } = props;
-    return { email, username };
+export const formikProps = {
+  mapPropsToValues: () => {
+    return { password: '', username: '' };
   },
   validationSchema: Yup.object().shape({
-    username: Yup.string().required('Pakollinen kenttä'),
+    username: Yup.string()
+      .required('Pakollinen kenttä')
+      .email('Tarkista sähköposti'),
     password: Yup.string().required('Pakollinen kenttä'),
   }),
-  handleSubmit: (values, props) => {
-    const {
-      props: { handleFormSubmit },
-    } = props;
-
-    const formigBag: FormikBag = omit(['props'], props);
-    handleFormSubmit(values, formigBag);
-  },
 
   displayName: 'LoginForm',
-})(PlainLoginForm);
+};
 
-export default LoginForm;
+export default PlainLoginForm;

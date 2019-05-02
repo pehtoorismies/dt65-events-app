@@ -1,61 +1,95 @@
 // @flow
 import React from 'react';
+import gql from 'graphql-tag';
+import { withFormik } from 'formik';
+import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
-import { path } from 'ramda';
-import { toast } from 'react-toastify';
-import Login from '../components/Forms/Auth/Login';
-import { ROUTES } from '../constants';
-import { API_URL } from '../config';
 import { login } from '../util/auth';
+import LoginCmp, { formikProps } from '../components/Forms/Auth/Login';
+import { ROUTES } from '../constants';
 import type { FormikBag } from '../flow-types';
 
-const statusPath = path(['response', 'status']);
+const LOGIN = gql`
+  mutation Register($password: String!, $username: String!) {
+    login(password: $password, username: $username) {
+      accessToken
+      idToken
+      expiresIn
+    }
+  }
+`;
+
+const config = {
+  name: 'loginMutation',
+};
 
 type Props = {
   history: any,
+  ...FormikBag,
+};
+
+const parseErrors = error => {
+  const { graphQLErrors, networkError } = error;
+
+  if (graphQLErrors) {
+    const err = graphQLErrors[0];
+    if (err.name === 'Auth0Error') {
+      const errors = {
+        username: 'Väärä tunnus tai salasana',
+        password: 'Väärä tunnus tai salasana',
+      };
+      return errors;
+    }
+  }
+
+  console.log('graphQLErrors', graphQLErrors);
+  console.log('networkError', networkError);
+
+  return {
+    general: 'General error',
+  };
+};
+
+const registerProps = {
+  ...formikProps,
+  handleSubmit: async (values, props) => {
+    const {
+      setErrors,
+      setSubmitting,
+      props: { loginMutation, history },
+    } = props;
+
+    try {
+      const authUser = await loginMutation({
+        variables: values,
+      });
+      const { idToken, accessToken, expiresIn } = authUser.data.login;
+      login(idToken, accessToken, expiresIn);
+      history.push('/');
+    } catch (error) {
+      const errors = parseErrors(error);
+      setErrors(errors);
+    } finally {
+      setSubmitting(false);
+    }
+  },
 };
 
 const LoginContainer = (props: Props) => {
-  const { history: h } = props;
-
-  const handleFormSubmit = (values: any, formikBag: FormikBag) => {
-    const url = `${API_URL}/auth/login`;
-    axios
-      .post(url, values)
-      .then(({ data }) => {
-        login(data.token);
-        h.push(ROUTES.home);
-      })
-      .catch(error => {
-        const status = statusPath(error);
-        if (status === 401) {
-          formikBag.setFieldError(
-            'username',
-            'Käyttäjätunnus tai salasana väärin'
-          );
-          formikBag.setFieldError(
-            'password',
-            'Käyttäjätunnus tai salasana väärin'
-          );
-        } else {
-          console.error(error);
-          toast.error('Palvelussa vikaa, kokeile kohta uudelleen', {
-            position: toast.POSITION.TOP_CENTER,
-          });
-        }
-      })
-      .finally(() => {
-        formikBag.setSubmitting(false);
-      });
-  };
+  const {
+    history: { push },
+  } = props;
 
   return (
-    <Login
-      handleFormSubmit={handleFormSubmit}
-      onForgotPasswordClick={() => h.push(ROUTES.forgotPassword)}
+    <LoginCmp
+      {...props}
+      onForgotPasswordClick={() => push(ROUTES.forgotPassword)}
     />
   );
 };
 
-export default withRouter(LoginContainer);
+export default compose(
+  withRouter,
+  graphql(LOGIN, config),
+  withFormik(registerProps)
+)(LoginContainer);

@@ -12,6 +12,7 @@ export type FormikBag = {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void,
   setSubmitting: (value: boolean) => void,
   setFieldError: (field: string, value: string) => void,
+  setErrors: (errors: any) => void,
 };
 
 export type ID = number | string;

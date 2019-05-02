@@ -1,12 +1,10 @@
 // @flow
 import React from 'react';
 import { Box, Flex, Heading, Text } from 'rebass';
-import { withFormik } from 'formik';
 import * as Yup from 'yup';
-import { omit } from 'ramda';
 import { Button, TextLink } from '../../Common';
 import FormField from '../FormField';
-import type { FormikBag, HandleSubmit } from '../../../flow-types';
+import type { FormikBag } from '../../../flow-types';
 
 type vals = {
   email: string,
@@ -26,8 +24,6 @@ type Props = {
     ...vals,
   },
   onLoginClick: () => void,
-  // eslint-disable-next-line react/no-unused-prop-types
-  handleFormSubmit: HandleSubmit,
 };
 
 const PlainRegisterForm = (props: Props) => {
@@ -41,21 +37,20 @@ const PlainRegisterForm = (props: Props) => {
     isSubmitting,
     onLoginClick,
   } = props;
-  console.log('errors', errors);
 
   return (
     <Box>
       <Heading py={3} color="black" textAlign="center" fontWeight={700}>
         REKISTERÖIDY
       </Heading>
-      <Text textAlign="center">
+      <Text mb={4} textAlign="center">
         Täytä kaikki kentät. Rekisteröintikoodin saat seuralta.
       </Text>
       <Text color="red">{errors.general}</Text>
       <form onSubmit={handleSubmit}>
         <FormField
           name="username"
-          label="Köyttäjätunnus, joka näkyy muille käyttäjille"
+          label="Käyttäjätunnus, joka näkyy muille käyttäjille"
           placeholder="metsäsika65"
           value={values.username}
           onChange={handleChange}
@@ -130,10 +125,16 @@ const PlainRegisterForm = (props: Props) => {
   );
 };
 
-const RegisterForm = withFormik({
-  mapPropsToValues: props => {
-    const { email, username } = props;
-    return { email, username };
+const formikProps = {
+  mapPropsToValues: () => {
+    return {
+      email: '',
+      username: '',
+      name: '',
+      password: '',
+      passwordRepeat: '',
+      registerSecret: '',
+    };
   },
   validationSchema: Yup.object().shape({
     email: Yup.string()
@@ -145,17 +146,12 @@ const RegisterForm = withFormik({
     passwordRepeat: Yup.string()
       .required('Pakollinen kenttä')
       .oneOf([Yup.ref('password'), null], 'Salasanojen tulee olla samat'),
+    registerSecret: Yup.string().required('Pakollinen kenttä'),
   }),
-  handleSubmit: (values, props) => {
-    const {
-      props: { handleFormSubmit },
-    } = props;
-
-    const formigBag: FormikBag = omit(['props'], props);
-    handleFormSubmit(values, formigBag);
-  },
-
   displayName: 'RegisterForm',
-})(PlainRegisterForm);
+}
 
-export default RegisterForm;
+
+export { formikProps };
+
+export default PlainRegisterForm;
