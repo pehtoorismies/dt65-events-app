@@ -190,7 +190,7 @@ const Creator = (props: Props) => {
   );
 };
 
-const Formik = withFormik({
+export const formikProps = {
   mapPropsToValues: () => ({ name: '', date: '', time: '', type: '' }),
 
   validationSchema: Yup.object().shape({
@@ -198,14 +198,9 @@ const Formik = withFormik({
     date: Yup.string().required('Anna päivämäärä'),
     type: Yup.string().required('Valitse tapahtuman tyyppi'),
   }),
-
-  handleSubmit: (values, formikBag) => {
-    const { props } = formikBag;
-    const { onSubmit } = props;
-    onSubmit(values, formikBag);
-  },
-
+  
   displayName: 'Creator',
-})(Creator);
+};
 
-export default Formik;
+
+export default Creator;

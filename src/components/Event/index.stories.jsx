@@ -2,11 +2,12 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { withFormik } from 'formik';
 import faker from 'faker';
 import { times } from 'ramda';
 import EventTypeSelector from './Creator/EventTypeSelector';
 import EventDateSelector from './Creator/EventDateSelector';
-import Creator from './Creator';
+import PlainCreatorForm, { formikProps as createProps } from './Creator';
 import EventBox from './EventBox';
 import HeadCountButton from './HeadCountButton';
 import { EVENT_TYPES } from '../../constants';
@@ -19,6 +20,13 @@ const createUser = id => {
 };
 
 const numParticipants = faker.random.number(20);
+
+const createFormikProps = {
+  ...createProps,
+  handleSubmit: action('Submit'),
+};
+
+const Creator = withFormik(createFormikProps)(PlainCreatorForm);
 
 const event = {
   id: 1,
