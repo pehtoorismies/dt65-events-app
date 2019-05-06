@@ -59,7 +59,7 @@ const isParticipating = (username, participants) => {
 };
 
 const findEventTypeName = (type, types) => {
-  const eventType = find(propEq('type', type))(types);
+  const eventType = find(propEq('type', type.toLowerCase()))(types);
   if (eventType) {
     return eventType.title;
   }
@@ -90,11 +90,14 @@ const EventBox = (props: Props) => {
     eventType,
     dateString,
   } = event;
-
+  console.log('event', event);
   const [showDetails, setShowDetails] = useState(false);
 
   const isPart = isParticipating(username, participants);
+
   const eventTypeName = findEventTypeName(eventType, EVENT_TYPES);
+  console.log('eventTypeName', eventTypeName);
+  
   const count = participants.length;
   return (
     <Wrapper p={3}>

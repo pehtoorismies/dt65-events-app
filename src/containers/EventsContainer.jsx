@@ -1,51 +1,84 @@
 // @flow
 import React, { Fragment, useEffect, useState } from 'react';
+import gql from 'graphql-tag';
+import { compose, graphql, Query } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
+
 import { map } from 'ramda';
 import { API_URL } from '../config';
 import { ROUTES } from '../constants';
 import EventBox from '../components/Event/EventBox';
 import type { Event } from '../flow-types';
 
+const FUTURE_EVENTS = gql`
+  query Events($date: DateTime!) {
+    events(where: { date_gt: $date }) {
+      id
+      title
+      race
+      participants {
+        username
+        id
+      }
+      type
+      date
+      time
+      address
+    }
+  }
+`;
+
+const config = {
+  name: 'allFutureEvents',
+};
+
 type Props = {
   history: any,
 };
 
-const renderEvent = (evt: Event) => {
+const renderEvent = (username: string) => (evt: Event) => {
   const { id } = evt;
-  return <EventBox key={id} event={evt} username="kissa" />;
+  const onParticipateClick = () => console.log('click');
+  return (
+    <EventBox
+      key={id}
+      event={evt}
+      username={username}
+      onParticipateClick={onParticipateClick}
+    />
+  );
 };
 
 const EventsContainer = (props: Props) => {
   const { history: h } = props;
+  const today = new Date().toISOString();
 
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  return (
+    <Query query={FUTURE_EVENTS} variables={{ date: today }} config={config}>
+      {({ loading, error, data }) => {
+        if (error) {
+          return <h1>Error...</h1>;
+        }
+        if (loading || !data) {
+          return <h1>Loading...</h1>;
+        }
+        const { events } = data;
+        const formattedEvents = map(evt => {
+          return {
+            ...evt,
+            location: evt.address,
+            name: evt.title,
+            eventType: evt.type,
+            date: new Date(evt.date),
+          };
+        }, events);
 
-  useEffect(() => {
-    const url = `${API_URL}/dt-events/next`;
-    axios
-      .get(url)
-      .then(({ data }) => {
-        setEvents(data);
+        const eventRenderer = renderEvent('some_username');
 
-        // login(data.token);
-        // h.push(ROUTES.home);
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <h1>loading</h1>;
-  }
-
-  return <Fragment>{map(renderEvent, events)}</Fragment>;
+        return <Fragment>{map(eventRenderer, formattedEvents)}</Fragment>;
+      }}
+    </Query>
+  );
 };
 
-export default withRouter(EventsContainer);
+export default compose(withRouter)(EventsContainer);
