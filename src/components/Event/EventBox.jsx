@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Box, Flex, Text, Card } from 'rebass';
 import styled from 'styled-components';
 import { map } from 'ramda';
@@ -8,7 +8,8 @@ import { DownArrow } from 'styled-icons/boxicons-regular/DownArrow';
 import { Medal } from 'styled-icons/fa-solid/Medal';
 import AnimateHeight from 'react-animate-height';
 import HeadCountButton from './HeadCountButton';
-import type { Event, Participant } from '../../flow-types';
+import { Button } from '../Common';
+import type { Event, Participant, ID } from '../../flow-types';
 import { colors } from '../../util/themeAx';
 import { isParticipating } from '../../util';
 
@@ -18,7 +19,9 @@ type Props = {
   event: Event,
   username: string,
   onParticipateClick: (participate: boolean) => void,
+  onShowEventClick: (id: ID) => void,
   loading: boolean,
+  fullyOpen: boolean,
 };
 
 const DArrow = styled(DownArrow)`
@@ -43,12 +46,31 @@ const EventTypeTitle = styled(Text)`
   text-shadow: 2px 2px 5px ${colors('black')};
 `;
 
+const OverButton = styled.button`
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+`;
+
 const ImageBox = styled(Flex)`
   background-image: url(https://source.unsplash.com/random/812x300);
   background-size: cover;
   border-radius: 15px 15px 0 0;
   width: 100%;
   height: 150px;
+  position: relative;
 `;
 
 const Pill = styled(Flex)`
@@ -68,10 +90,52 @@ const renderPill = username => (participant: Participant) => {
   );
 };
 
+const getOpenerButton = (fullyOpen, setShowDetails, showDetails) => {
+  if (fullyOpen) {
+    return (
+      <Fragment>
+        <Flex justifyContent="center" alignItems="center" py={2}>
+        <Button m={1} variant="outline">
+          Muokkaa
+        </Button>
+      </Flex>
+      <Flex justifyContent="center" alignItems="center" py={3} flexDirection="column" bg="darkWhite">
+        <Text color="red" fontWeight="700">DANGER ZONE</Text>
+        <Button m={1} variant="warn">
+          Poista
+        </Button>
+      </Flex>
+      </Fragment>
+      
+
+
+    );
+  }
+  return (
+    <Flex
+      onClick={() => setShowDetails(!showDetails)}
+      bg="blue"
+      justifyContent="center"
+      alignItems="center"
+      py={2}
+    >
+      <DArrow down={showDetails} />
+    </Flex>
+  );
+};
+
 const EventBox = (props: Props) => {
-  const { event, username, onParticipateClick, loading } = props;
+  const {
+    event,
+    username,
+    onParticipateClick,
+    onShowEventClick,
+    loading,
+    fullyOpen,
+  } = props;
 
   const {
+    id,
     title,
     subtitle,
     participants,
@@ -82,7 +146,7 @@ const EventBox = (props: Props) => {
     date,
   } = event;
 
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(fullyOpen);
 
   const isPart = isParticipating(username, participants);
   const formattedDate = format(date, 'DD.MM.YYYY');
@@ -96,6 +160,7 @@ const EventBox = (props: Props) => {
           alignItems="center"
           justifyContent="center"
         >
+          <OverButton onClick={() => onShowEventClick(id)} />
           <EventTypeTitle
             letterSpacing={4}
             color="white"
@@ -149,15 +214,7 @@ const EventBox = (props: Props) => {
             <Text my={1}>lorem ipsum</Text>
           </Box>
         </AnimateHeight>
-        <Flex
-          onClick={() => setShowDetails(!showDetails)}
-          bg="blue"
-          justifyContent="center"
-          alignItems="center"
-          py={2}
-        >
-          <DArrow down={showDetails} />
-        </Flex>
+        {getOpenerButton(fullyOpen, setShowDetails, showDetails)}
       </Card>
     </Wrapper>
   );

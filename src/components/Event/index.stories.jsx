@@ -43,23 +43,32 @@ const event = {
   location: 'Raappavuori',
 };
 
+const common = {
+  loading: false,
+  onParticipateClick: action('Part'),
+  onShowEventClick: action('Show event'),
+  fullyOpen: false,
+};
+
 const idx = faker.random.number(numParticipants - 1);
 
 storiesOf('Event/Listing', module)
   .add('box not participating', () => (
-    <EventBox
-      loading={false}
-      onParticipateClick={action('Part')}
-      username="someUser"
-      event={event}
-    />
+    <EventBox username="someUser" event={event} {...common} />
   ))
   .add('box is participating', () => (
     <EventBox
-      loading={false}
-      onParticipateClick={action('Part')}
       username={event.participants[idx].username}
       event={event}
+      {...common}
+    />
+  ))
+  .add('box is participating - fully open', () => (
+    <EventBox
+      username={event.participants[idx].username}
+      event={event}
+      {...common}
+      fullyOpen
     />
   ))
   .add('count', () => (

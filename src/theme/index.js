@@ -67,6 +67,14 @@ const theme = {
       boxShadow: 'inset 0 0 0 2px',
       
     },
+    warn: {
+      color: white,
+      backgroundColor: red,
+      boxShadow: 'inset 0 0 0 2px',
+      "&:hover": {
+        color: Color(red).lighten(0.5).string(),
+      },
+    },
   },
 };
 

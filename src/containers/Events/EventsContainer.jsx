@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { map } from 'ramda';
 import { LOCAL_USER, FUTURE_EVENTS } from './queries';
 import { renderEvent, formatEvent } from './Common';
+import { ROUTES } from '../../constants';
 
 const config = {
   name: 'allFutureEvents',
@@ -17,6 +18,8 @@ type Props = {
 const EventsContainer = (props: Props) => {
   const { history: h } = props;
   const today = new Date().toISOString();
+
+  const onShowClickEvent = id => h.push(`${ROUTES.events}/${id}`);
 
   return (
     <Query query={FUTURE_EVENTS} variables={{ date: today }} config={config}>
@@ -35,7 +38,7 @@ const EventsContainer = (props: Props) => {
             }
             const formattedEvents = map(formatEvent, events);
             const username: string = localUser ? localUser.username : '';
-            const eventRenderer = renderEvent(username);
+            const eventRenderer = renderEvent(username, onShowClickEvent);
             return <Fragment>{map(eventRenderer, formattedEvents)}</Fragment>;
           }}
         </Query>

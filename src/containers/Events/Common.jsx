@@ -9,7 +9,11 @@ import { JOIN_EVENT, UNJOIN_EVENT } from './queries';
 import { EVENT_TYPES } from '../../constants';
 import type { Event } from '../../flow-types';
 
-const renderEvent = (username: string) => (evt: Event) => {
+const renderEvent = (
+  username: string,
+  onShowEventClick: any,
+  fullyOpen: boolean = false
+) => (evt: Event) => {
   const { id } = evt;
   const joined = isParticipating(username, evt.participants);
 
@@ -30,6 +34,8 @@ const renderEvent = (username: string) => (evt: Event) => {
 
               return (
                 <EventBox
+                  fullyOpen={fullyOpen}
+                  onShowEventClick={onShowEventClick}
                   loading={unjoinLoading || joinLoading}
                   event={evt}
                   username={username}
@@ -53,7 +59,6 @@ const findType = (type, allTypes) => {
   }
   return 'not defined';
 };
-
 
 const formatEvent = (evt: any) => ({
   ...evt,

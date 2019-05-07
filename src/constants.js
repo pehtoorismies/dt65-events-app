@@ -39,11 +39,14 @@ const EVENT_TYPES = [
 
 const WEEK_DAYS = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
 
+const EVENTS_PATH = '/events';
+
 const ROUTES = {
   login: '/login',
   register: '/register',
   home: '/',
-  event: '/events/:id',
+  events: EVENTS_PATH,
+  event: `${EVENTS_PATH}/:id`,
   profile: '/profile',
   forgotPassword: '/forgot-password',
   createEvent: '/create-event',

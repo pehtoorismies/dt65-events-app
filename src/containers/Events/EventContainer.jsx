@@ -21,6 +21,10 @@ const EventContainer = (props: Props) => {
   const { history: h } = props;
   const eventId = getId(props);
 
+  const onShowClickEvent = (id) => {
+    console.log('id', id);
+  }
+
   return (
     <Query query={CURRENT_EVENT} variables={{ id: eventId }} config={config}>
       {({ loading: loadingEvents, error: eventsError, data: { event } }) => (
@@ -40,7 +44,7 @@ const EventContainer = (props: Props) => {
             const formattedEvent = formatEvent(event);
 
             const username: string = localUser ? localUser.username : '';
-            const eventRenderer = renderEvent(username);
+            const eventRenderer = renderEvent(username, onShowClickEvent);
             return <Fragment>{eventRenderer(formattedEvent)}</Fragment>;
           }}
         </Query>
