@@ -11,7 +11,8 @@ import MenuListContainer from './containers/MenuListContainer';
 import LoginContainer from './containers/LoginContainer';
 import RegisterContainer from './containers/RegisterContainer';
 import ForgotPasswordContainer from './containers/ForgotPasswordContainer';
-import EventsContainer from './containers/EventsContainer';
+import EventsContainer from './containers/Events/EventsContainer';
+import EventContainer from './containers/Events/EventContainer';
 import CreateEventContainer from './containers/CreateEventContainer';
 import PrivateRoute from './PrivateRoute';
 import { ROUTES } from './constants';
@@ -31,7 +32,6 @@ const App = () => (
           <ToastContainer />
           <Box p={2}>
             <Route exact path={ROUTES.login} component={LoginContainer} />
-            
             <Route
               exact
               path={ROUTES.forgotPassword}
@@ -39,10 +39,15 @@ const App = () => (
             />
             <Route exact path={ROUTES.register} component={RegisterContainer} />
             <PrivateRoute
+              path={ROUTES.event}
+              component={EventContainer}
+            />
+            <PrivateRoute
               exact
               path={ROUTES.home}
               component={EventsContainer}
             />
+            
             <PrivateRoute exact path={ROUTES.profile} component={Profile} />
             <PrivateRoute
               exact

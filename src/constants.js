@@ -43,6 +43,7 @@ const ROUTES = {
   login: '/login',
   register: '/register',
   home: '/',
+  event: '/events/:id',
   profile: '/profile',
   forgotPassword: '/forgot-password',
   createEvent: '/create-event',

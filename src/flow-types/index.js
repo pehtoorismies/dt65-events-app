@@ -35,13 +35,15 @@ export type EventType = {
 };
 
 export type Event = {
-  name: string,
+  title: string,
+  subtitle: string,
   id: ID,
   race: boolean,
   time: string,
   date: Date,
   location: string,
   participants: Participant[],
+  type: EventType,
 };
 
 export type EventCatergoryClick = (type: EventCategory) => void;

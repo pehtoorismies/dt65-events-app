@@ -2,14 +2,15 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text, Card } from 'rebass';
 import styled from 'styled-components';
-import { map, find, findIndex, propEq } from 'ramda';
+import { map } from 'ramda';
+import { format } from 'date-fns';
 import { DownArrow } from 'styled-icons/boxicons-regular/DownArrow';
 import { Medal } from 'styled-icons/fa-solid/Medal';
 import AnimateHeight from 'react-animate-height';
 import HeadCountButton from './HeadCountButton';
 import type { Event, Participant } from '../../flow-types';
 import { colors } from '../../util/themeAx';
-import { EVENT_TYPES } from '../../constants';
+import { isParticipating } from '../../util';
 
 const ANIM_TIME = 500;
 
@@ -23,7 +24,7 @@ type Props = {
 const DArrow = styled(DownArrow)`
   color: ${colors('white')};
   width: 20px;
-  transform: rotate(${props => (props.down ? 540 : 0)}deg);
+  transform: rotate(${props => (props.down ? 180 : 0)}deg);
   transition: all ${ANIM_TIME}ms;
 `;
 
@@ -55,18 +56,6 @@ const Pill = styled(Flex)`
   border-radius: 4px;
 `;
 
-const isParticipating = (username, participants) => {
-  return findIndex(propEq('username', username))(participants) > 0;
-};
-
-const findEventTypeName = (type, types) => {
-  const eventType = find(propEq('type', type.toLowerCase()))(types);
-  if (eventType) {
-    return eventType.title;
-  }
-  return 'not defined';
-};
-
 const renderPill = username => (participant: Participant) => {
   const { username: usr, id } = participant;
   const color = username === usr ? 'pink' : 'blue';
@@ -83,31 +72,25 @@ const EventBox = (props: Props) => {
   const { event, username, onParticipateClick, loading } = props;
 
   const {
-    name,
+    title,
+    subtitle,
     participants,
     location,
     time,
     race,
-    eventType,
-    dateString,
+    type,
+    date,
   } = event;
 
   const [showDetails, setShowDetails] = useState(false);
 
   const isPart = isParticipating(username, participants);
-
-  const eventTypeName = findEventTypeName(eventType, EVENT_TYPES);
-  
+  const formattedDate = format(date, 'DD.MM.YYYY');
 
   const count = participants.length;
   return (
-    <Wrapper p={3}>
-      <Card
-        width="100%"
-        mx="auto"
-        variant="basic"
-        boxShadow="0 2px 16px rgba(0, 0, 0, 0.25)"
-      >
+    <Wrapper py={1}>
+      <Card width="100%" mx="auto" variant="shadow">
         <ImageBox
           flexDirection="column"
           alignItems="center"
@@ -119,7 +102,7 @@ const EventBox = (props: Props) => {
             fontSize={40}
             fontWeight={900}
           >
-            {eventTypeName}
+            {title}
           </EventTypeTitle>
 
           <Race isVisible={race} />
@@ -128,9 +111,9 @@ const EventBox = (props: Props) => {
         <Flex p={2} bg="darkWhite" justifyContent="space-between">
           <Flex justifyContent="space-around" flexDirection="column">
             <Text fontSize={20} fontWeight="bold">
-              {name}
+              {subtitle}
             </Text>
-            <Text fontSize={16}>{dateString}</Text>
+            <Text fontSize={16}>{formattedDate}</Text>
           </Flex>
           <Flex alignItems="center" justifyContent="center">
             <HeadCountButton
@@ -144,7 +127,7 @@ const EventBox = (props: Props) => {
           </Flex>
         </Flex>
         <AnimateHeight duration={ANIM_TIME} height={showDetails ? 'auto' : 0}>
-          <Box bg="darkWhite" px={2}>
+          <Box px={2}>
             <Flex>
               <Text fontWeight="bold" color="lightBlack" width={60}>
                 Sijainti:

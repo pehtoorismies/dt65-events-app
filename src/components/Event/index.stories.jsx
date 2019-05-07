@@ -30,12 +30,15 @@ const Creator = withFormik(createFormikProps)(PlainCreatorForm);
 
 const event = {
   id: 1,
-  name: 'Raatojuoksu',
+  title: 'Raatojuoksu',
+  subtitle: 'Tarkenne',
   date: new Date(),
-  dateString: '12.12.2019',
   race: true,
   time: '10:00',
-  eventType: 'running',
+  type: {
+    title: 'Juoksu',
+    type: 'running',
+  },
   participants: times(createUser, numParticipants),
   location: 'Raappavuori',
 };
