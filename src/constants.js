@@ -50,6 +50,7 @@ const ROUTES = {
   profile: '/profile',
   forgotPassword: '/forgot-password',
   createEvent: '/create-event',
+  notFound: '/404',
 };
 
 export { EVENT_TYPES, WEEK_DAYS, ROUTES };

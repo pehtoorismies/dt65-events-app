@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { compose, Query } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { map } from 'ramda';
+import { isEmptyArray } from 'ramda-adjunct';
 import { LOCAL_USER, FUTURE_EVENTS } from './queries';
 import { renderEvent, formatEvent } from './Common';
 import { ROUTES } from '../../constants';
@@ -36,9 +37,17 @@ const EventsContainer = (props: Props) => {
             if (eventsError || userError) {
               return <h1>Error...</h1>;
             }
+            if (isEmptyArray(events)) {
+              return <h1>no stuff</h1>
+            }
+
             const formattedEvents = map(formatEvent, events);
             const username: string = localUser ? localUser.username : '';
-            const eventRenderer = renderEvent(username, onShowClickEvent);
+            const eventRenderer = renderEvent(
+              username,
+              onShowClickEvent,
+              false
+            );
             return <Fragment>{map(eventRenderer, formattedEvents)}</Fragment>;
           }}
         </Query>

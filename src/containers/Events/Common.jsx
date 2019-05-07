@@ -7,12 +7,13 @@ import EventBox from '../../components/Event/EventBox';
 import { isParticipating } from '../../util';
 import { JOIN_EVENT, UNJOIN_EVENT } from './queries';
 import { EVENT_TYPES } from '../../constants';
-import type { Event } from '../../flow-types';
+import type { Event, ID } from '../../flow-types';
 
 const renderEvent = (
   username: string,
   onShowEventClick: any,
-  fullyOpen: boolean = false
+  fullyOpen: boolean = false,
+  onDeleteEvent?: (id: ID) => Promise<void>
 ) => (evt: Event) => {
   const { id } = evt;
   const joined = isParticipating(username, evt.participants);
@@ -34,6 +35,7 @@ const renderEvent = (
 
               return (
                 <EventBox
+                  onDeleteEventClick={onDeleteEvent}
                   fullyOpen={fullyOpen}
                   onShowEventClick={onShowEventClick}
                   loading={unjoinLoading || joinLoading}

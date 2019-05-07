@@ -20,6 +20,7 @@ type Props = {
   username: string,
   onParticipateClick: (participate: boolean) => void,
   onShowEventClick: (id: ID) => void,
+  onDeleteEventClick?: (id: ID) => Promise<void>,
   loading: boolean,
   fullyOpen: boolean,
 };
@@ -90,25 +91,35 @@ const renderPill = username => (participant: Participant) => {
   );
 };
 
-const getOpenerButton = (fullyOpen, setShowDetails, showDetails) => {
+const getOpenerButton = (
+  fullyOpen,
+  setShowDetails,
+  showDetails,
+  onDeleteClick
+) => {
   if (fullyOpen) {
     return (
       <Fragment>
         <Flex justifyContent="center" alignItems="center" py={2}>
-        <Button m={1} variant="outline">
-          Muokkaa
-        </Button>
-      </Flex>
-      <Flex justifyContent="center" alignItems="center" py={3} flexDirection="column" bg="darkWhite">
-        <Text color="red" fontWeight="700">DANGER ZONE</Text>
-        <Button m={1} variant="warn">
-          Poista
-        </Button>
-      </Flex>
+          <Button m={1} variant="outline">
+            Muokkaa
+          </Button>
+        </Flex>
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          py={3}
+          flexDirection="column"
+          bg="darkWhite"
+        >
+          <Text color="red" fontWeight="700">
+            DANGER ZONE
+          </Text>
+          <Button m={1} variant="warn" onClick={onDeleteClick}>
+            Poista
+          </Button>
+        </Flex>
       </Fragment>
-      
-
-
     );
   }
   return (
@@ -130,6 +141,7 @@ const EventBox = (props: Props) => {
     username,
     onParticipateClick,
     onShowEventClick,
+    onDeleteEventClick,
     loading,
     fullyOpen,
   } = props;
@@ -150,6 +162,12 @@ const EventBox = (props: Props) => {
 
   const isPart = isParticipating(username, participants);
   const formattedDate = format(date, 'DD.MM.YYYY');
+
+  const onDelete = () => {
+    if (onDeleteEventClick) {
+      onDeleteEventClick(id);
+    }
+  };
 
   const count = participants.length;
   return (
@@ -214,10 +232,14 @@ const EventBox = (props: Props) => {
             <Text my={1}>lorem ipsum</Text>
           </Box>
         </AnimateHeight>
-        {getOpenerButton(fullyOpen, setShowDetails, showDetails)}
+        {getOpenerButton(fullyOpen, setShowDetails, showDetails, onDelete)}
       </Card>
     </Wrapper>
   );
+};
+
+EventBox.defaultProps = {
+  onDeleteEventClick: () => {},
 };
 
 export default EventBox;

@@ -33,6 +33,14 @@ const CURRENT_EVENT = gql`
   ${Event.fragments.participants}
 `;
 
+const DELETE_EVENT = gql`
+  mutation DeleteEvent($id: ID!) {
+    deleteEvent(where: { id: $id }) {
+      id
+    }
+  }
+`;
+
 const FUTURE_EVENTS = gql`
   query Events($date: DateTime!) {
     events(where: { date_gt: $date }) {
@@ -72,4 +80,11 @@ const UNJOIN_EVENT = gql`
   ${Event.fragments.participants}
 `;
 
-export { CURRENT_EVENT, LOCAL_USER, JOIN_EVENT, UNJOIN_EVENT, FUTURE_EVENTS };
+export {
+  CURRENT_EVENT,
+  LOCAL_USER,
+  JOIN_EVENT,
+  UNJOIN_EVENT,
+  FUTURE_EVENTS,
+  DELETE_EVENT,
+};

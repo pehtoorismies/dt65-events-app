@@ -60,10 +60,10 @@ const isPublicFilter = menuItem => !!menuItem.public;
 
 const filterMenus = (isAuth, menus) => {
   if (isAuth) {
-    return reject(isPublicFilter, menus)
+    return reject(isPublicFilter, menus);
   }
-  return filter(isPublicFilter, menus)
-}
+  return filter(isPublicFilter, menus);
+};
 
 const MenuListContainer = (props: Props) => {
   const { history: h } = props;
@@ -75,10 +75,16 @@ const MenuListContainer = (props: Props) => {
     }
     menuItem.action(h);
   };
-  
+
   const menus = filterMenus(isAuthenticated(), menuItems);
 
-  return <MenuList menuItems={menus} onMenuItemClick={onMenuItemClick} />;
+  return (
+    <MenuList
+      onHomeClick={() => h.push(ROUTES.home)}
+      menuItems={menus}
+      onMenuItemClick={onMenuItemClick}
+    />
+  );
 };
 
 export default withRouter(MenuListContainer);

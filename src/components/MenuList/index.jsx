@@ -10,6 +10,7 @@ import { colors } from '../../util/themeAx';
 type Props = {
   menuItems?: MenuItem[],
   onMenuItemClick: (id: ID, history: any) => void,
+  onHomeClick: () => void,
 };
 
 const Menu = styled(Flex)`
@@ -45,7 +46,7 @@ const renderMenuItem = clicked => (menuItem: MenuItem) => {
 };
 
 const MenuList = (props: Props) => {
-  const { menuItems, onMenuItemClick } = props;
+  const { menuItems, onMenuItemClick, onHomeClick } = props;
   const [isActive, setActive] = useState(false);
 
   const onClick = id => {
@@ -66,7 +67,7 @@ const MenuList = (props: Props) => {
   return (
     <React.Fragment>
       <Menubar bg="pink" alignItems="center" justifyContent="space-between">
-        <Text ml={2} color="white" fontWeight={700}>
+        <Text ml={2} color="white" fontWeight={700} onClick={onHomeClick}>
           DT65 Events
         </Text>
         {menuIcon}
