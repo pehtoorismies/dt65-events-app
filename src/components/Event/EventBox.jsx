@@ -17,6 +17,7 @@ type Props = {
   event: Event,
   username: string,
   onParticipateClick: (participate: boolean) => void,
+  loading: boolean,
 };
 
 const DArrow = styled(DownArrow)`
@@ -79,7 +80,7 @@ const renderPill = username => (participant: Participant) => {
 };
 
 const EventBox = (props: Props) => {
-  const { event, username, onParticipateClick } = props;
+  const { event, username, onParticipateClick, loading } = props;
 
   const {
     name,
@@ -90,14 +91,14 @@ const EventBox = (props: Props) => {
     eventType,
     dateString,
   } = event;
-  console.log('event', event);
+
   const [showDetails, setShowDetails] = useState(false);
 
   const isPart = isParticipating(username, participants);
 
   const eventTypeName = findEventTypeName(eventType, EVENT_TYPES);
-  console.log('eventTypeName', eventTypeName);
   
+
   const count = participants.length;
   return (
     <Wrapper p={3}>
@@ -133,6 +134,7 @@ const EventBox = (props: Props) => {
           </Flex>
           <Flex alignItems="center" justifyContent="center">
             <HeadCountButton
+              disabled={loading}
               highlighted={isPart}
               count={count}
               onClick={() => {

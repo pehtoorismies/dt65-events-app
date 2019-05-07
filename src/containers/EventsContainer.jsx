@@ -1,11 +1,10 @@
 // @flow
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 import gql from 'graphql-tag';
-import { compose, graphql, Query } from 'react-apollo';
+import { compose, Query, Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
-
-import { map } from 'ramda';
-import { API_URL } from '../config';
+import { toast } from 'react-toastify';
+import { map, propEq, findIndex } from 'ramda';
 import { ROUTES } from '../constants';
 import EventBox from '../components/Event/EventBox';
 import type { Event } from '../flow-types';
@@ -28,6 +27,45 @@ const FUTURE_EVENTS = gql`
   }
 `;
 
+const LOCAL_USER = gql`
+  query LocalUser {
+    localUser @client {
+      id
+      username
+    }
+  }
+`;
+
+const JOIN_EVENT = gql`
+  mutation JoinEvent($eventId: ID!, $username: String!) {
+    joinEvent(eventId: $eventId, username: $username) {
+      id
+      participants {
+        username
+        id
+      }
+    }
+  }
+`;
+const UNJOIN_EVENT = gql`
+  mutation UnJoinEvent($eventId: ID!, $username: String!) {
+    unjoinEvent(eventId: $eventId, username: $username) {
+      id
+      participants {
+        username
+        id
+      }
+    }
+  }
+`;
+
+const isParticipating = (username, participants) => {
+  const index = findIndex(propEq('username', username || ''))(
+    participants || []
+  );
+  return index >= 0;
+};
+
 const config = {
   name: 'allFutureEvents',
 };
@@ -38,14 +76,44 @@ type Props = {
 
 const renderEvent = (username: string) => (evt: Event) => {
   const { id } = evt;
-  const onParticipateClick = () => console.log('click');
+  const joined = isParticipating(username, evt.participants);
+
   return (
-    <EventBox
-      key={id}
-      event={evt}
-      username={username}
-      onParticipateClick={onParticipateClick}
-    />
+    <Mutation key={id} mutation={JOIN_EVENT}>
+      {(
+        joinEvent,
+        {loading: joinLoading, error: joinError }
+      ) => {
+        return (
+          <Mutation mutation={UNJOIN_EVENT}>
+            {(
+              unjoinEvent,
+              { loading: unjoinLoading, error: unjoinError }
+            ) => {
+              const action = joined ? unjoinEvent : joinEvent;
+              if (unjoinError || joinError) {
+                toast.error(`Ilmoittautumisessa ongelmia...`, {
+                  position: toast.POSITION.TOP_CENTER,
+                  autoClose: false,
+                });
+              }
+
+              
+              return (
+                <EventBox
+                  loading={unjoinLoading || joinLoading}
+                  event={evt}
+                  username={username}
+                  onParticipateClick={() =>
+                    action({ variables: { eventId: id, username } })
+                  }
+                />
+              );
+            }}
+          </Mutation>
+        );
+      }}
+    </Mutation>
   );
 };
 
@@ -55,28 +123,34 @@ const EventsContainer = (props: Props) => {
 
   return (
     <Query query={FUTURE_EVENTS} variables={{ date: today }} config={config}>
-      {({ loading, error, data }) => {
-        if (error) {
-          return <h1>Error...</h1>;
-        }
-        if (loading || !data) {
-          return <h1>Loading...</h1>;
-        }
-        const { events } = data;
-        const formattedEvents = map(evt => {
-          return {
-            ...evt,
-            location: evt.address,
-            name: evt.title,
-            eventType: evt.type,
-            date: new Date(evt.date),
-          };
-        }, events);
-
-        const eventRenderer = renderEvent('some_username');
-
-        return <Fragment>{map(eventRenderer, formattedEvents)}</Fragment>;
-      }}
+      {({ loading: loadingEvents, error: eventsError, data: { events } }) => (
+        <Query query={LOCAL_USER}>
+          {({
+            loading: loadingUser,
+            error: userError,
+            data: { localUser },
+          }) => {
+            if (loadingEvents || loadingUser) {
+              return <span>loading...</span>;
+            }
+            if (eventsError || userError) {
+              return <h1>Error...</h1>;
+            }
+            const formattedEvents = map(evt => {
+              return {
+                ...evt,
+                location: evt.address,
+                name: evt.title,
+                eventType: evt.type,
+                date: new Date(evt.date),
+              };
+            }, events);
+            const username: string = localUser ? localUser.username : '';
+            const eventRenderer = renderEvent(username);
+            return <Fragment>{map(eventRenderer, formattedEvents)}</Fragment>;
+          }}
+        </Query>
+      )}
     </Query>
   );
 };

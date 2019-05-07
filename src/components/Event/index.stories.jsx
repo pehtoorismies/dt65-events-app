@@ -45,6 +45,7 @@ const idx = faker.random.number(numParticipants - 1);
 storiesOf('Event/Listing', module)
   .add('box not participating', () => (
     <EventBox
+      loading={false}
       onParticipateClick={action('Part')}
       username="someUser"
       event={event}
@@ -52,16 +53,35 @@ storiesOf('Event/Listing', module)
   ))
   .add('box is participating', () => (
     <EventBox
+      loading={false}
       onParticipateClick={action('Part')}
       username={event.participants[idx].username}
       event={event}
     />
   ))
   .add('count', () => (
-    <HeadCountButton highlighted={false} count={99} onClick={action('Click')} />
+    <HeadCountButton
+      disabled={false}
+      highlighted={false}
+      count={99}
+      onClick={action('Click')}
+    />
   ))
   .add('count - highlited', () => (
-    <HeadCountButton highlighted count={99} onClick={action('Click')} />
+    <HeadCountButton
+      disabled={false}
+      highlighted
+      count={99}
+      onClick={action('Click')}
+    />
+  ))
+  .add('count - disabled', () => (
+    <HeadCountButton
+      disabled
+      highlighted
+      count={99}
+      onClick={action('Click')}
+    />
   ));
 
 storiesOf('Event/Creator', module)

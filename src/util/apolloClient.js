@@ -12,8 +12,8 @@ const getLocalUser = token => {
 
   return {
     __typename: TYPE_LOCALUSER,
-    username: decoded.email,
-    age: 14,
+    username: decoded.nickname,
+    id: decoded.sub,
   };
 };
 
@@ -33,7 +33,19 @@ const client = new ApolloClient({
   clientState: {
     defaults: {
       localUser: getLocalUser(getIdToken()),
+      age: 12,
     },
+    resolvers: {},
+    typeDefs: `
+      type LocalUser {
+        id: String!
+        username: String!
+      }
+
+      type Query {
+        localUser: LocalUser 
+      }
+  `,
   },
   request: operation => {
     operation.setContext({ headers: getAuthHeaders() });
