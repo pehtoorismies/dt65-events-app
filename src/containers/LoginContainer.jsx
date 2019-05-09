@@ -4,9 +4,11 @@ import gql from 'graphql-tag';
 import { withFormik } from 'formik';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
-import { login } from '../util/auth';
+import { login as authLogin } from '../util/auth';
 import LoginCmp, { formikProps } from '../components/Forms/Auth/Login';
 import { ROUTES } from '../constants';
+import { LOCAL_USER } from './queries'
+import { getLocalUser } from '../util'
 import type { FormikBag } from '../flow-types';
 
 const LOGIN = gql`
@@ -21,6 +23,20 @@ const LOGIN = gql`
 
 const config = {
   name: 'loginMutation',
+  options: {
+    update: (dataProxy, { data: { login } }) => {
+      const { idToken, accessToken, expiresIn } = login;
+      authLogin(idToken, accessToken, expiresIn);
+      dataProxy.writeQuery({
+        query: LOCAL_USER,
+        data: {
+          localUser: getLocalUser(idToken),
+        },
+      });
+      
+     return null;
+    },
+  }
 };
 
 type Props = {
@@ -60,11 +76,10 @@ const registerProps = {
     } = props;
 
     try {
-      const authUser = await loginMutation({
+      await loginMutation({
         variables: values,
       });
-      const { idToken, accessToken, expiresIn } = authUser.data.login;
-      login(idToken, accessToken, expiresIn);
+      
       history.push('/');
     } catch (error) {
       const errors = parseErrors(error);

@@ -1,21 +1,6 @@
 import ApolloClient from 'apollo-boost';
-import jwtDecode from 'jwt-decode';
 import { getIdToken, getAccessToken, logout } from './auth';
-
-const TYPE_LOCALUSER = 'LocalUser';
-
-const getLocalUser = token => {
-  if (!token) {
-    return null;
-  }
-  const decoded = jwtDecode(token);
-
-  return {
-    __typename: TYPE_LOCALUSER,
-    username: decoded.nickname,
-    id: decoded.sub,
-  };
-};
+import { getLocalUser } from './index'
 
 const getAuthHeaders = () => {
   const accessToken = getAccessToken();

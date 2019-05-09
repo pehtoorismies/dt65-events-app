@@ -1,10 +1,11 @@
 // @flow
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { compose, Query } from 'react-apollo';
 import { find, propEq, filter, reject } from 'ramda';
 import MenuList from '../components/MenuList';
 import { ROUTES } from '../constants';
-import { isAuthenticated } from '../util/auth';
+import { LOCAL_USER } from './queries';
 
 const findById = id => find(propEq('id', id));
 
@@ -75,15 +76,24 @@ const MenuListContainer = (props: Props) => {
     menuItem.action(h);
   };
 
-  const menus = filterMenus(isAuthenticated(), menuItems);
-
   return (
-    <MenuList
-      onHomeClick={() => h.push(ROUTES.home)}
-      menuItems={menus}
-      onMenuItemClick={onMenuItemClick}
-    />
+    <Query query={LOCAL_USER}>
+      {({ loading, error, data: { localUser } }) => {
+        if (error) {
+          console.error(error);
+        }
+        const menuList = loading ? [] : filterMenus(!!localUser, menuItems);
+
+        return (
+          <MenuList
+            onHomeClick={() => h.push(ROUTES.home)}
+            menuItems={menuList}
+            onMenuItemClick={onMenuItemClick}
+          />
+        );
+      }}
+    </Query>
   );
 };
 
-export default withRouter(MenuListContainer);
+export default compose(withRouter)(MenuListContainer);

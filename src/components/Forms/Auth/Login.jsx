@@ -1,9 +1,7 @@
 // @flow
 import React from 'react';
 import { Box, Flex, Heading } from 'rebass';
-import { withFormik } from 'formik';
 import * as Yup from 'yup';
-import { omit } from 'ramda';
 import { Button, TextLink } from '../../Common';
 import FormField from '../FormField';
 import type { FormikBag } from '../../../flow-types';

@@ -41,6 +41,10 @@ const WEEK_DAYS = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
 
 const EVENTS_PATH = '/events';
 
+const GRAPHQL_TYPES = {
+  LOCAL_USER: 'LocalUser',
+}
+
 const ROUTES = {
   login: '/login',
   logout: '/logout',
@@ -54,4 +58,4 @@ const ROUTES = {
   notFound: '/404',
 };
 
-export { EVENT_TYPES, WEEK_DAYS, ROUTES };
+export { EVENT_TYPES, WEEK_DAYS, ROUTES, GRAPHQL_TYPES };
