@@ -44,6 +44,7 @@ const evtImg = (type: string) => (`url('${getEventImage(type)}')`);
 
 const Wrapper = styled(Flex)`
   max-width: 400px;
+  width: 100%;
 `;
 
 const EventTypeTitle = styled(Text)`

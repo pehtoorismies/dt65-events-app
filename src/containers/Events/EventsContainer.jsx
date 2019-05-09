@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { compose, Query } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { map } from 'ramda';
+import { Flex } from 'rebass';
 import { isEmptyArray } from 'ramda-adjunct';
 import { LOCAL_USER, FUTURE_EVENTS } from '../queries';
 import { renderEvent, formatEvent } from './Common';
@@ -12,7 +13,7 @@ const config = {
   name: 'allFutureEvents',
 };
 
-type Props = {  
+type Props = {
   history: any,
 };
 
@@ -38,7 +39,7 @@ const EventsContainer = (props: Props) => {
               return <h1>Error...</h1>;
             }
             if (isEmptyArray(events)) {
-              return <h1>no stuff</h1>
+              return <h1>no stuff</h1>;
             }
 
             const formattedEvents = map(formatEvent, events);
@@ -48,7 +49,15 @@ const EventsContainer = (props: Props) => {
               onShowClickEvent,
               false
             );
-            return <Fragment>{map(eventRenderer, formattedEvents)}</Fragment>;
+            return (
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                {map(eventRenderer, formattedEvents)}
+              </Flex>
+            );
           }}
         </Query>
       )}
