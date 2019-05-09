@@ -4,7 +4,7 @@ import { compose, Query } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { map } from 'ramda';
 import { isEmptyArray } from 'ramda-adjunct';
-import { LOCAL_USER, FUTURE_EVENTS } from './queries';
+import { LOCAL_USER, FUTURE_EVENTS } from '../queries';
 import { renderEvent, formatEvent } from './Common';
 import { ROUTES } from '../../constants';
 
@@ -12,7 +12,7 @@ const config = {
   name: 'allFutureEvents',
 };
 
-type Props = {
+type Props = {  
   history: any,
 };
 

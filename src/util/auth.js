@@ -1,4 +1,5 @@
 // @flow
+
 const ID_TOKEN = 'dt65IdToken';
 const ACCESS_TOKEN = 'dt65AccessToken';
 const EXPIRES_IN = 'dt65ExpiresIn';

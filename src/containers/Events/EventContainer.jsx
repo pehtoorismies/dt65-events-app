@@ -1,12 +1,14 @@
 // @flow
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import { compose, Query, graphql } from 'react-apollo';
 import { withRouter, Redirect } from 'react-router-dom';
+import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { path } from 'ramda';
+import Popup from '../../components/Popup';
 import { renderEvent, formatEvent } from './Common';
 
-import { LOCAL_USER, CURRENT_EVENT, DELETE_EVENT } from './queries';
+import { LOCAL_USER, CURRENT_EVENT, DELETE_EVENT } from '../queries';
 import { ROUTES } from '../../constants';
 
 const getId = path(['match', 'params', 'id']);
@@ -15,6 +17,10 @@ const config = {
   name: 'getEvent',
 };
 
+const Wrapper = styled.div`
+  position: relative;
+`;
+
 type Props = {
   history: any,
   deleteEventMutation: any,
@@ -22,15 +28,19 @@ type Props = {
 
 const EventContainer = (props: Props) => {
   const { history: h, deleteEventMutation } = props;
+  const [popupVisible, setPopupVisible] = useState(false);
   const eventId = getId(props);
 
-  const onShowClickEvent = () => {};
-  const onDeleteEvent = async id => {
+  const onOkClick = async () => {
     try {
       await deleteEventMutation({
-        variables: { id },
+        variables: { id: eventId },
       });
+      setPopupVisible(false);
       h.push(ROUTES.home);
+      toast.info(`Poistaminen onnistui`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     } catch (error) {
       console.error(error);
       toast.error(`Poistaminen epäonnistui`, {
@@ -39,6 +49,10 @@ const EventContainer = (props: Props) => {
       });
     }
   };
+  const onDeleteEvent = () => {
+    setPopupVisible(true);
+  };
+  const onShowClickEvent = () => {};
 
   return (
     <Query query={CURRENT_EVENT} variables={{ id: eventId }} config={config}>
@@ -74,7 +88,17 @@ const EventContainer = (props: Props) => {
               true,
               onDeleteEvent
             );
-            return <Fragment>{eventRenderer(formattedEvent)}</Fragment>;
+
+            return (
+              <Wrapper>
+                <Popup
+                  showModal={popupVisible}
+                  onCancelClick={() => setPopupVisible(false)}
+                  onOkClick={onOkClick}
+                />
+                {eventRenderer(formattedEvent)}
+              </Wrapper>
+            );
           }}
         </Query>
       )}

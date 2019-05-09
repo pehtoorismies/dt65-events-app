@@ -43,6 +43,7 @@ const EVENTS_PATH = '/events';
 
 const ROUTES = {
   login: '/login',
+  logout: '/logout',
   register: '/register',
   home: '/',
   events: EVENTS_PATH,

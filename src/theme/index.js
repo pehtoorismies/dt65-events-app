@@ -9,6 +9,7 @@ const black = "#140D33";
 const lightBlack = "#404035";
 const pink = "#FF80EA";
 const white = "#fff";
+const transparentBlack = 'rgba(0,0,0,0.6)';
 
 const theme = {
   breakpoints: ['40em', '52em', '64em'],
@@ -23,7 +24,8 @@ const theme = {
     white,
     darkWhite,
     lightBlack,
-    lightergrey
+    lightergrey,
+    transparentBlack
   },
   space: [0, 4, 8, 16, 32, 64, 128, 256],
   // fonts: {

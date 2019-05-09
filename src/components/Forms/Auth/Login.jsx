@@ -38,7 +38,7 @@ const PlainLoginForm = (props: Props) => {
   return (
     <Box>
       <Heading py={3} color="black" textAlign="center" fontWeight={700}>
-        KIRJAUDU
+        LOGIN
       </Heading>
       <form onSubmit={handleSubmit}>
         <FormField

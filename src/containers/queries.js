@@ -61,6 +61,13 @@ const LOCAL_USER = gql`
   }
 `;
 
+const LOGOUT_LOCAL_USER = gql`
+  mutation LogoutLocalUser {
+    logoutLocalUser @client
+  }
+`;
+
+
 const JOIN_EVENT = gql`
   mutation JoinEvent($eventId: ID!, $username: String!) {
     joinEvent(eventId: $eventId, username: $username) {
@@ -87,4 +94,5 @@ export {
   UNJOIN_EVENT,
   FUTURE_EVENTS,
   DELETE_EVENT,
+  LOGOUT_LOCAL_USER,
 };

@@ -9,6 +9,7 @@ import GlobalStyle from './GlobalStyle';
 import theme from './theme';
 import MenuListContainer from './containers/MenuListContainer';
 import LoginContainer from './containers/LoginContainer';
+import LogoutContainer from './containers/LogoutContainer';
 import RegisterContainer from './containers/RegisterContainer';
 import ForgotPasswordContainer from './containers/ForgotPasswordContainer';
 import EventsContainer from './containers/Events/EventsContainer';
@@ -31,9 +32,10 @@ const App = () => (
         <Router>
           <MenuListContainer />
           <ToastContainer />
-          <Box p={2}>
+          <Box>
             <Switch>
               <Route exact path={ROUTES.login} component={LoginContainer} />
+              <Route exact path={ROUTES.logout} component={LogoutContainer} />
               <Route
                 exact
                 path={ROUTES.forgotPassword}

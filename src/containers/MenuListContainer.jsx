@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { find, propEq, filter, reject } from 'ramda';
 import MenuList from '../components/MenuList';
 import { ROUTES } from '../constants';
-import { logout, isAuthenticated } from '../util/auth';
+import { isAuthenticated } from '../util/auth';
 
 const findById = id => find(propEq('id', id));
 
@@ -50,8 +50,7 @@ const menuItems = [
     id: 50,
     title: 'Logout',
     action: history => {
-      logout();
-      history.push(ROUTES.login);
+      history.push(ROUTES.logout);
     },
   },
 ];

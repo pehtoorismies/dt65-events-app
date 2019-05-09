@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { find, propEq } from 'ramda';
 import EventBox from '../../components/Event/EventBox';
 import { isParticipating } from '../../util';
-import { JOIN_EVENT, UNJOIN_EVENT } from './queries';
+import { JOIN_EVENT, UNJOIN_EVENT } from '../queries';
 import { EVENT_TYPES } from '../../constants';
 import type { Event, ID } from '../../flow-types';
 

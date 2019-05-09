@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-boost';
 import jwtDecode from 'jwt-decode';
-import { getIdToken, getAccessToken } from './auth';
+import { getIdToken, getAccessToken, logout } from './auth';
 
 const TYPE_LOCALUSER = 'LocalUser';
 
@@ -33,17 +33,35 @@ const client = new ApolloClient({
   clientState: {
     defaults: {
       localUser: getLocalUser(getIdToken()),
-      age: 12,
     },
-    resolvers: {},
+    resolvers: {
+      Mutation: {
+        logoutLocalUser: (_, variables, { cache }) => {
+          logout();
+          cache.writeData({
+            data: {
+              localUser: null
+            },
+          });
+
+          return null;
+        }
+      },
+    },
     typeDefs: `
       type LocalUser {
         id: String!
-        username: String!
+        username: String!return null null
+      }
+      type Popup {
+        visible: Boolean!
       }
 
       type Query {
         localUser: LocalUser 
+      }
+      type Mutation {
+        logoutLocalUser: Boolean! 
       }
   `,
   },
