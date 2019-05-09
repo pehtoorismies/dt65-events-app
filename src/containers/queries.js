@@ -5,6 +5,7 @@ Event.fragments = {
     fragment EventDetails on Event {
       id
       title
+      subtitle
       race
       type
       date

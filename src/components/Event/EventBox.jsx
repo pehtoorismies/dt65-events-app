@@ -3,7 +3,7 @@ import React, { Fragment, useState } from 'react';
 import { Box, Flex, Text, Card } from 'rebass';
 import styled from 'styled-components';
 import { map } from 'ramda';
-import { format } from 'date-fns';
+import { format, getDay } from 'date-fns';
 import { DownArrow } from 'styled-icons/boxicons-regular/DownArrow';
 import { Medal } from 'styled-icons/fa-solid/Medal';
 import AnimateHeight from 'react-animate-height';
@@ -11,7 +11,8 @@ import HeadCountButton from './HeadCountButton';
 import { Button } from '../Common';
 import type { Event, Participant, ID } from '../../flow-types';
 import { colors } from '../../util/themeAx';
-import { isParticipating } from '../../util';
+import { isParticipating, getEventImage } from '../../util'; 
+import { WEEK_DAYS } from '../../constants';
 
 const ANIM_TIME = 500;
 
@@ -20,7 +21,7 @@ type Props = {
   username: string,
   onParticipateClick: (participate: boolean) => void,
   onShowEventClick: (id: ID) => void,
-  onDeleteEventClick?: (id: ID) => Promise<void>,
+  onDeleteEventClick?: (id: ID) => Promise<void>, 
   loading: boolean,
   fullyOpen: boolean,
 };
@@ -38,6 +39,8 @@ const Race = styled(Medal)`
   width: 30px;
   padding: 4px;
 `;
+
+const evtImg = (type: string) => (`url('${getEventImage(type)}')`);
 
 const Wrapper = styled(Flex)`
   max-width: 400px;
@@ -65,8 +68,12 @@ const OverButton = styled.button`
   background-color: transparent;
 `;
 
+const RoundFlex = styled(Flex)`
+  border-radius: 0 0 15px 15px;
+`
+
 const ImageBox = styled(Flex)`
-  background-image: url(https://source.unsplash.com/random/812x300);
+  background-image: ${props => evtImg(props.eventImage)};
   background-size: cover;
   border-radius: 15px 15px 0 0;
   width: 100%;
@@ -123,7 +130,7 @@ const getOpenerButton = (
     );
   }
   return (
-    <Flex
+    <RoundFlex
       onClick={() => setShowDetails(!showDetails)}
       bg="blue"
       justifyContent="center"
@@ -131,7 +138,7 @@ const getOpenerButton = (
       py={2}
     >
       <DArrow down={showDetails} />
-    </Flex>
+    </RoundFlex>
   );
 };
 
@@ -171,9 +178,10 @@ const EventBox = (props: Props) => {
 
   const count = participants.length;
   return (
-    <Wrapper py={1}>
+    <Wrapper p={2}>
       <Card width="100%" mx="auto" variant="shadow">
         <ImageBox
+          eventImage={type.img}
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
@@ -194,9 +202,9 @@ const EventBox = (props: Props) => {
         <Flex p={2} bg="darkWhite" justifyContent="space-between">
           <Flex justifyContent="space-around" flexDirection="column">
             <Text fontSize={20} fontWeight="bold">
-              {subtitle}
+              {subtitle || type.title}
             </Text>
-            <Text fontSize={16}>{formattedDate}</Text>
+            <Text fontSize={16}>{WEEK_DAYS[getDay(date)]} {formattedDate}</Text>
           </Flex>
           <Flex alignItems="center" justifyContent="center">
             <HeadCountButton
@@ -229,7 +237,7 @@ const EventBox = (props: Props) => {
             <Text fontWeight="bold" color="lightBlack" width={60}>
               Kuvaus:
             </Text>
-            <Text my={1}>lorem ipsum</Text>
+            <Text my={2}>lorem ipsum</Text>
           </Box>
         </AnimateHeight>
         {getOpenerButton(fullyOpen, setShowDetails, showDetails, onDelete)}

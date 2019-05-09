@@ -1,39 +1,63 @@
 const EVENT_TYPES = [
   {
-    type: 'cycling',
+    type: 'Cycling',
     title: 'Pyöräily',
+    img: 'cycling',
   },
   {
-    type: 'running',
+    type: 'Running',
     title: 'Juoksu',
+    img: 'running',
   },
   {
-    type: 'orienteering',
+    type: 'Orienteering',
     title: 'Suunnistus',
+    img: 'orienteering',
   },
   {
-    type: 'track-running',
+    type: 'TrackRunning',
     title: 'Ratajuoksu',
+    img: 'track-running',
   },
   {
-    type: 'spinning',
+    type: 'Spinning',
     title: 'Spinning',
+    img: 'spinning',
   },
   {
-    type: 'triathlon',
+    type: 'Triathlon',
     title: 'Triathlon',
+    img: 'triathlon',
   },
   {
-    type: 'swimming',
+    type: 'Swimming',
     title: 'Uinti',
+    img: 'swimming',
   },
   {
-    type: 'ultras',
+    type: 'Ultras',
     title: 'Ultras',
+    img: 'swimming',
   },
   {
-    type: 'other',
+    type: 'Other',
     title: 'Muu',
+    img: 'other',
+  },
+  {
+    type: 'Skiing',
+    title: 'Hiihto',
+    img: 'skiing',
+  },
+  {
+    type: 'Karonkka',
+    title: 'Karonkka',
+    img: 'karonkka',
+  },
+  {
+    type: 'Meeting',
+    title: 'Kokous',
+    img: 'meeting',
   },
 ];
 

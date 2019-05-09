@@ -22,7 +22,17 @@ export type MenuItem = {
   title: string,
 };
 
-export type EventCategory = 'running' | 'cycling' | 'orienteering';
+export type EventCategory =
+  | 'Running'
+  | 'Triathlon'
+  | 'Swimming'
+  | 'Orienteering'
+  | 'Ultras'
+  | 'Other'
+  | 'Meeting'
+  | 'Skiing'
+  | 'Spinning'
+  | 'TrackRunning';
 
 export type Participant = {
   username: string,
@@ -32,6 +42,7 @@ export type Participant = {
 export type EventType = {
   type: EventCategory,
   title: string,
+  img: string,
 };
 
 export type Event = {

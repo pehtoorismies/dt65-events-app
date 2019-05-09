@@ -55,7 +55,7 @@ const renderEvent = (
 };
 
 const findType = (type, allTypes) => {
-  const eventType = find(propEq('type', type.toLowerCase()))(allTypes);
+  const eventType = find(propEq('type', type))(allTypes);
   if (eventType) {
     return eventType;
   }
@@ -66,7 +66,7 @@ const formatEvent = (evt: any) => ({
   ...evt,
   location: evt.address,
   name: evt.title,
-  type: findType(evt.type.toLowerCase(), EVENT_TYPES),
+  type: findType(evt.type, EVENT_TYPES),
   date: new Date(evt.date),
 });
 

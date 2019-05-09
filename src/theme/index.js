@@ -40,7 +40,7 @@ const theme = {
     shadow: {
       backgroundColor: 'transparent',
       boxShadow: "0 2px 16px rgba(0, 0, 0, 0.25)",
-      borderRadius: '15px 15px 0 0'
+      borderRadius: '15px 15px 15px 15px'
     }
   },
   buttons: {
