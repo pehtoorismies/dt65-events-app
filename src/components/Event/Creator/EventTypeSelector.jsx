@@ -1,9 +1,9 @@
 // @flow
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { map } from 'ramda';
 import { CheckCircle } from 'styled-icons/fa-regular/CheckCircle';
-import { Flex, Text, Box } from 'rebass';
+import { Flex, Text } from 'rebass';
 import { colors } from '../../../util/themeAx';
 
 import type {
@@ -15,7 +15,7 @@ import type {
 type Props = {
   onEventClick: EventCatergoryClick,
   eventTypes: EventType[],
-  preSelected: EventCategory,
+  preSelected?: EventCategory,
 };
 
 const Grid = styled.div`
@@ -41,7 +41,7 @@ const CheckMark = styled(CheckCircle)`
 
 const renderEvent = (
   onClick: EventCatergoryClick,
-  preSelected: EventCategory
+  preSelected?: EventCategory
 ) => (event: EventType) => {
   const { title, type } = event;
   const selected = preSelected === type;
@@ -78,5 +78,9 @@ const EventTypeSelector = (props: Props) => {
 
   return <Grid>{map(eventRenderer, eventTypes)}</Grid>;
 };
+
+EventTypeSelector.defaultProps = {
+  preSelected: null,
+}
 
 export default EventTypeSelector;

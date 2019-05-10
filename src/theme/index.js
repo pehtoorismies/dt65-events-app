@@ -4,6 +4,7 @@ const blue = '#07c';
 const red = '#FF5471';
 const lightgray = '#9a9a9a';
 const lightergrey = '#E6E6E6';
+const lightestgrey = '#e9e9e9';
 const darkWhite = '#f4f4f5';
 const black = "#140D33";
 const lightBlack = "#404035";
@@ -25,6 +26,7 @@ const theme = {
     darkWhite,
     lightBlack,
     lightergrey,
+    lightestgrey,
     transparentBlack
   },
   space: [0, 4, 8, 16, 32, 64, 128, 256],
@@ -48,7 +50,7 @@ const theme = {
       color: white,
       backgroundColor: pink,
       "&:hover": {
-        backgroundColor: Color(pink).lighten(0.1).string(),
+        backgroundColor: Color(pink).darken(0.1).string(),
       },
       "&:disabled": {
         backgroundColor: Color(pink).lighten(0.1).string(),

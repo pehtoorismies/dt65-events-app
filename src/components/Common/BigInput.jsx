@@ -3,7 +3,7 @@ import { colors } from '../../util/themeAx';
 
 const BigInput = styled.input`
   width: 100%;
-  height: ${props => props.height}px;
+  height: ${props => props.size}px;
   padding: 5px;
   border: 0;
   /* border-bottom: 2px solid ${colors('lightgray')}; */
@@ -11,7 +11,7 @@ const BigInput = styled.input`
   outline: none;
   color: #2c1917;
   caret-color: ${colors('pink')};
-  font-size: 30px;
+  font-size: ${props => props.size}px;
   font-family: 'Titillium Web', 'sans serif';
   font-weight: bold;
   text-align: center; 
@@ -25,7 +25,7 @@ const BigInput = styled.input`
 `;
 
 BigInput.defaultProps = {
-  height: 30,
+  size: 30,
 };
 
 export default BigInput;

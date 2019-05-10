@@ -22,7 +22,7 @@ type Props = {
   count: number,
   onClick: () => void,
   highlighted: boolean,
-  disabled: boolean,
+  disabled?: boolean,
 };
 
 const UserIcon = styled(User)`
@@ -76,5 +76,9 @@ const HeadCountButton = (props: Props) => {
     </Count>
   );
 };
+
+HeadCountButton.defaultProps = {
+  disabled: false,
+}
 
 export default HeadCountButton;

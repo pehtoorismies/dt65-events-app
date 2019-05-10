@@ -9,6 +9,8 @@ import EventTypeSelector from './Creator/EventTypeSelector';
 import EventDateSelector from './Creator/EventDateSelector';
 import PlainCreatorForm, { formikProps as createProps } from './Creator';
 import EventBox from './EventBox';
+import EditButtons from './EditButtons';
+import PreviewButtons from './PreviewButtons';
 import HeadCountButton from './HeadCountButton';
 import { EVENT_TYPES } from '../../constants';
 
@@ -37,7 +39,8 @@ const event = {
   time: '10:00',
   type: {
     title: 'Juoksu',
-    type: 'running',
+    type: 'Running',
+    img: 'running',
   },
   participants: times(createUser, numParticipants),
   location: 'Raappavuori',
@@ -47,7 +50,12 @@ const common = {
   loading: false,
   onParticipateClick: action('Part'),
   onShowEventClick: action('Show event'),
+  onCancelClick: action('Cancel'),
+  onCreateEventClick: action('Create'),
+  onEditEventClick: action('Edit'),
+  onDeleteEventClick: action('Delete'),
   fullyOpen: false,
+  preview: false,
 };
 
 const idx = faker.random.number(numParticipants - 1);
@@ -69,6 +77,15 @@ storiesOf('Event/Listing', module)
       event={event}
       {...common}
       fullyOpen
+    />
+  ))
+  .add('box is participating - fully open / preview', () => (
+    <EventBox
+      username={event.participants[idx].username}
+      event={event}
+      {...common}
+      fullyOpen
+      preview
     />
   ))
   .add('count', () => (
@@ -96,12 +113,29 @@ storiesOf('Event/Listing', module)
     />
   ));
 
+const editButtonProps = {
+  fullyOpen: true,
+  setShowDetails: action('Show details'),
+  showDetails: true,
+  onDeleteClick: action('Delete'),
+  onEditClick: action('Edit'),
+};
+
+storiesOf('Event/Buttons', module)
+  .add('Edit fully open', () => <EditButtons {...editButtonProps} />)
+  .add('Edit ', () => (
+    <EditButtons {...editButtonProps} fullyOpen={false} showDetails={false} />
+  ))
+  .add('Previev ', () => (
+    <PreviewButtons onCreateClick={action('Create')} onCancelClick={action('Cancel')} />
+  ));
+
 storiesOf('Event/Creator', module)
   .add('type', () => (
     <EventTypeSelector
       onEventClick={action('Event Type')}
       eventTypes={EVENT_TYPES}
-      preSelected="cycling"
+      preSelected="Cycling"
     />
   ))
   .add('date', () => (

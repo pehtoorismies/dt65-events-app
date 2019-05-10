@@ -1,8 +1,10 @@
 // @flow
-import { findIndex, propEq } from 'ramda';
+import { findIndex, propEq, find } from 'ramda';
 import jwtDecode from 'jwt-decode';
-import { GRAPHQL_TYPES } from '../constants';
+import { GRAPHQL_TYPES, EVENT_TYPES } from '../constants';
 import { IMAGE_URL } from '../config';
+
+import type { EventCategory, EventType } from '../flow-types';
 
 const isParticipating = (username: string, participants) => {
   return findIndex(propEq('username', username || ''))(participants || []) >= 0;
@@ -26,4 +28,8 @@ const getEventImage = (type: string) => {
   return `${IMAGE_URL}/events/${i.toLowerCase()}.jpg`;
 };
 
-export { isParticipating, getLocalUser, getEventImage };
+const typeFromEvent: EventType = (eventCategory?: EventCategory) => {
+  return find(propEq('type', eventCategory))(EVENT_TYPES);
+};
+
+export { isParticipating, getLocalUser, getEventImage, typeFromEvent };

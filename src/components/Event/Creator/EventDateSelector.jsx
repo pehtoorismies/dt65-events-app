@@ -9,6 +9,7 @@ import { WEEK_DAYS } from '../../../constants';
 type Props = {
   onSetDateClick: (value: any) => void,
   preSelected?: any,
+  label?: string,
 };
 
 const DateBox = styled(Flex)`
@@ -50,7 +51,7 @@ const dateConfig = {
 };
 
 const EventDateSelector = (props: Props) => {
-  const { preSelected, onSetDateClick } = props;
+  const { preSelected, onSetDateClick, label } = props;
   const theDate = preSelected || new Date();
   const [isOpen, setIsOpen] = useState(false);
   const [eventDate, setEventDate] = useState(theDate);
@@ -67,42 +68,42 @@ const EventDateSelector = (props: Props) => {
     </Text>
   ) : (
     <Text color="white" fontSize={16} fontWeight="bold">
-      Valitse päivä
+      {label}
     </Text>
   );
   const bg = preSelected ? 'pink' : 'blue';
 
   return (
     <React.Fragment>
-    <Flex flexDirection="column" alignItems="center">
-      <DateBox onClick={() => setIsOpen(true)} bg={bg} p={3}>
-        {showText}
-      </DateBox>
+      <Flex flexDirection="column" alignItems="center">
+        <DateBox onClick={() => setIsOpen(true)} bg={bg} p={3}>
+          {showText}
+        </DateBox>
 
-      <Box bg="pink">
-        <DatePicker
-          showCaption
-          showHeader
-          dateConfig={dateConfig}
-          value={eventDate}
-          theme="ios"
-          isOpen={isOpen}
-          // min={new Date()}
-          headerFormat="DD.MM.YYYY"
-          confirmText="OK"
-          cancelText="Cancel"
-          onSelect={okClick}
-          onCancel={() => setIsOpen(false)}
-        />
-      </Box>
-    </Flex>
+        <Box bg="pink">
+          <DatePicker
+            showCaption
+            showHeader
+            dateConfig={dateConfig}
+            value={eventDate}
+            theme="ios"
+            isOpen={isOpen}
+            // min={new Date()}
+            headerFormat="DD.MM.YYYY"
+            confirmText="OK"
+            cancelText="Cancel"
+            onSelect={okClick}
+            onCancel={() => setIsOpen(false)}
+          />
+        </Box>
+      </Flex>
     </React.Fragment>
   );
 };
 
-
 EventDateSelector.defaultProps = {
   preSelected: null,
-}
+  label: 'Valitse',
+};
 
 export default EventDateSelector;

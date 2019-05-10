@@ -6,6 +6,7 @@ import { withFormik } from 'formik';
 import { compose, graphql } from 'react-apollo';
 import styled from 'styled-components';
 import Creator, { formikProps } from '../components/Event/Creator';
+import { ROUTES } from '../constants';
 
 type Props = {};
 
@@ -23,12 +24,14 @@ const CREATE_EVENT = gql`
     $title: String!
     $date: DateTime!
     $time: String
+    $subtitle: String
     $race: Boolean
     $type: EventType!
     $address: String
   ) {
     createEvent(
       title: $title
+      subtitle: $subtitle
       date: $date
       time: $time
       race: $race
@@ -45,7 +48,7 @@ const CreateEventContainer = (props: Props) => {
   const {
     history: { push },
   } = props;
-  return <Creator {...props} />;
+  return <Creator onCancel={() =>push(ROUTES.home)} {...props} />;
 };
 
 const config = {
@@ -59,13 +62,13 @@ const createEventProps = {
     const {
       setErrors,
       setSubmitting,
-      props: {  history, createEventMutation },
+      props: { history, createEventMutation },
     } = props;
 
     try {
-      const event = await createEventMutation({
-        variables: values,
-      });
+      // const event = await createEventMutation({
+      //   variables: values,
+      // });
       // const { idToken, accessToken, expiresIn } = authUser.data.login;
       // login(idToken, accessToken, expiresIn);
       // history.push('/');

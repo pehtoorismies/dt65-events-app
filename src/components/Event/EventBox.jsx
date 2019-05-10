@@ -1,17 +1,17 @@
 // @flow
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Flex, Text, Card } from 'rebass';
 import styled from 'styled-components';
 import { map } from 'ramda';
 import { format, getDay } from 'date-fns';
-import { DownArrow } from 'styled-icons/boxicons-regular/DownArrow';
 import { Medal } from 'styled-icons/fa-solid/Medal';
 import AnimateHeight from 'react-animate-height';
 import HeadCountButton from './HeadCountButton';
-import { Button } from '../Common';
+import EditButtons from './EditButtons';
+import PreviewButtons from './PreviewButtons';
 import type { Event, Participant, ID } from '../../flow-types';
 import { colors } from '../../util/themeAx';
-import { isParticipating, getEventImage } from '../../util'; 
+import { isParticipating, getEventImage } from '../../util';
 import { WEEK_DAYS } from '../../constants';
 
 const ANIM_TIME = 500;
@@ -21,17 +21,14 @@ type Props = {
   username: string,
   onParticipateClick: (participate: boolean) => void,
   onShowEventClick: (id: ID) => void,
-  onDeleteEventClick?: (id: ID) => Promise<void>, 
-  loading: boolean,
+  onDeleteEventClick?: (id: ID) => void,
+  onCancelClick?: () => void,
+  onCreateEventClick?: (id: ID) => void,
+  onEditEventClick?: (id: ID) => void,
+  loading?: boolean,
+  preview: boolean,
   fullyOpen: boolean,
 };
-
-const DArrow = styled(DownArrow)`
-  color: ${colors('white')};
-  width: 20px;
-  transform: rotate(${props => (props.down ? 180 : 0)}deg);
-  transition: all ${ANIM_TIME}ms;
-`;
 
 const Race = styled(Medal)`
   display: ${props => (props.isVisible ? 'block' : 'none')};
@@ -40,7 +37,7 @@ const Race = styled(Medal)`
   padding: 4px;
 `;
 
-const evtImg = (type: string) => (`url('${getEventImage(type)}')`);
+const evtImg = (type: string) => `url('${getEventImage(type)}')`;
 
 const Wrapper = styled(Flex)`
   max-width: 400px;
@@ -69,10 +66,6 @@ const OverButton = styled.button`
   background-color: transparent;
 `;
 
-const RoundFlex = styled(Flex)`
-  border-radius: 0 0 15px 15px;
-`
-
 const ImageBox = styled(Flex)`
   background-image: ${props => evtImg(props.eventImage)};
   background-size: cover;
@@ -99,50 +92,6 @@ const renderPill = username => (participant: Participant) => {
   );
 };
 
-const getOpenerButton = (
-  fullyOpen,
-  setShowDetails,
-  showDetails,
-  onDeleteClick
-) => {
-  if (fullyOpen) {
-    return (
-      <Fragment>
-        <Flex justifyContent="center" alignItems="center" py={2}>
-          <Button m={1} variant="outline">
-            Muokkaa
-          </Button>
-        </Flex>
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          py={3}
-          flexDirection="column"
-          bg="darkWhite"
-        >
-          <Text color="red" fontWeight="700">
-            DANGER ZONE
-          </Text>
-          <Button m={1} variant="warn" onClick={onDeleteClick}>
-            Poista
-          </Button>
-        </Flex>
-      </Fragment>
-    );
-  }
-  return (
-    <RoundFlex
-      onClick={() => setShowDetails(!showDetails)}
-      bg="blue"
-      justifyContent="center"
-      alignItems="center"
-      py={2}
-    >
-      <DArrow down={showDetails} />
-    </RoundFlex>
-  );
-};
-
 const EventBox = (props: Props) => {
   const {
     event,
@@ -150,8 +99,12 @@ const EventBox = (props: Props) => {
     onParticipateClick,
     onShowEventClick,
     onDeleteEventClick,
+    onCancelClick,
+    onCreateEventClick,
+    onEditEventClick,
     loading,
     fullyOpen,
+    preview,
   } = props;
 
   const {
@@ -166,6 +119,12 @@ const EventBox = (props: Props) => {
     date,
   } = event;
 
+  const evtType = type || {
+    type: 'Running',
+    img: 'running',
+    title: 'Juoksu',
+  };
+
   const [showDetails, setShowDetails] = useState(fullyOpen);
 
   const isPart = isParticipating(username, participants);
@@ -177,12 +136,40 @@ const EventBox = (props: Props) => {
     }
   };
 
+  const editButtonProps = {
+    fullyOpen,
+    setShowDetails,
+    showDetails,
+    onDelete,
+    onDeleteClick: onDelete,
+    animTime: ANIM_TIME,
+    onEditClick: onEditEventClick,
+  };
+
+  const previewButtonProps = {
+    onCancelClick,
+    onCreateClick: onCreateEventClick,
+  };
+
+  const buttons = preview ? (
+    <PreviewButtons {...previewButtonProps} />
+  ) : (
+    <EditButtons {...editButtonProps} />
+  );
+
+  const participateAction = () => {
+    if (preview) {
+      return;
+    }
+    onParticipateClick(isPart);
+  };
+
   const count = participants.length;
   return (
-    <Wrapper p={2}>
+    <Wrapper p={2} bg="white">
       <Card width="100%" mx="auto" variant="shadow">
         <ImageBox
-          eventImage={type.img}
+          eventImage={evtType.img}
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
@@ -191,10 +178,10 @@ const EventBox = (props: Props) => {
           <EventTypeTitle
             letterSpacing={4}
             color="white"
-            fontSize={40}
+            fontSize={30}
             fontWeight={900}
           >
-            {title}
+            {evtType.title}
           </EventTypeTitle>
 
           <Race isVisible={race} />
@@ -203,18 +190,21 @@ const EventBox = (props: Props) => {
         <Flex p={2} bg="darkWhite" justifyContent="space-between">
           <Flex justifyContent="space-around" flexDirection="column">
             <Text fontSize={20} fontWeight="bold">
-              {subtitle || type.title}
+              {title}
             </Text>
-            <Text fontSize={16}>{WEEK_DAYS[getDay(date)]} {formattedDate}</Text>
+            <Text fontSize={16} fontWeight="bold">
+              {subtitle || evtType.title}
+            </Text>
+            <Text fontSize={16}>
+              {WEEK_DAYS[getDay(date)]} {formattedDate}
+            </Text>
           </Flex>
           <Flex alignItems="center" justifyContent="center">
             <HeadCountButton
               disabled={loading}
               highlighted={isPart}
               count={count}
-              onClick={() => {
-                onParticipateClick(isPart);
-              }}
+              onClick={participateAction}
             />
           </Flex>
         </Flex>
@@ -241,7 +231,7 @@ const EventBox = (props: Props) => {
             <Text my={2}>lorem ipsum</Text>
           </Box>
         </AnimateHeight>
-        {getOpenerButton(fullyOpen, setShowDetails, showDetails, onDelete)}
+        {buttons}
       </Card>
     </Wrapper>
   );
@@ -249,6 +239,10 @@ const EventBox = (props: Props) => {
 
 EventBox.defaultProps = {
   onDeleteEventClick: () => {},
+  onEditEventClick: () => {},
+  onCancelClick: () => {},
+  onCreateEventClick: () => {},
+  loading: false,
 };
 
 export default EventBox;

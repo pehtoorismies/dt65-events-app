@@ -37,7 +37,7 @@ const EVENT_TYPES = [
   {
     type: 'Ultras',
     title: 'Ultras',
-    img: 'swimming',
+    img: 'ultras',
   },
   {
     type: 'Other',
