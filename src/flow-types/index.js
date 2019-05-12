@@ -55,7 +55,7 @@ export type Event = {
   race: boolean,
   time: string,
   date: Date,
-  location: string,
+  address: string,
   participants: Participant[],
   type: EventType,
 };

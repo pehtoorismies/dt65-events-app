@@ -17,7 +17,7 @@ const PreviewButtons = (props: Props) => {
         Sulje
       </Button>
       <Button m={2} variant="primary" onClick={onCreateClick}>
-        Luo tapahtuma
+        Luo
       </Button>
     </Flex>
   );

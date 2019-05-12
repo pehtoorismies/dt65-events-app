@@ -1,23 +1,15 @@
 // @flow
 import React from 'react';
 import gql from 'graphql-tag';
-import { withRouter } from 'react-router-dom';
-import { withFormik } from 'formik';
-import { compose, graphql } from 'react-apollo';
-import styled from 'styled-components';
-import Creator, { formikProps } from '../components/Event/Creator';
+import { toast } from 'react-toastify';
+import { withRouter, Redirect } from 'react-router-dom';
+import { compose, graphql, Mutation } from 'react-apollo';
+import Creator from '../components/Event/Creator';
 import { ROUTES } from '../constants';
 
-type Props = {};
-
-// id: ID!
-// title: String!
-// date: DateTime!
-// time: String
-// address: String
-// description: String
-// race: Boolean!
-// type: EventType!
+type Props = {
+  history: any,
+};
 
 const CREATE_EVENT = gql`
   mutation CreateEvent(
@@ -28,18 +20,21 @@ const CREATE_EVENT = gql`
     $race: Boolean
     $type: EventType!
     $address: String
+    $description: String
   ) {
     createEvent(
-      title: $title
-      subtitle: $subtitle
-      date: $date
-      time: $time
-      race: $race
-      address: $address
+      data: {
+        title: $title
+        date: $date
+        time: $time
+        race: $race
+        type: $type
+        subtitle: $subtitle
+        address: $address
+        description: $description
+      }
     ) {
-      accessToken
-      idToken
-      expiresIn
+      id
     }
   }
 `;
@@ -48,42 +43,46 @@ const CreateEventContainer = (props: Props) => {
   const {
     history: { push },
   } = props;
-  return <Creator onCancel={() =>push(ROUTES.home)} {...props} />;
+
+  return (
+    <Mutation mutation={CREATE_EVENT}>
+      {(createEvent, { loading, error, data }) => {
+        if (data) {
+          toast.info('Tapahtuma luotu');
+          const { id } = data.createEvent;
+          return (
+            <Redirect
+              to={{
+                pathname: `${ROUTES.events}/${id}`,
+              }}
+            />
+          );
+        }
+        if (loading) {
+          return <h1>loading</h1>;
+        }
+        if (error) {
+          console.error(error);
+        }
+        return (
+          <Creator
+            onSubmit={values => {
+              createEvent({ variables: values });
+            }}
+            onCancel={() => push(ROUTES.home)}
+            {...props}
+          />
+        );
+      }}
+    </Mutation>
+  );
 };
 
 const config = {
   name: 'createEventMutation',
 };
 
-const createEventProps = {
-  ...formikProps,
-  handleSubmit: async (values, props) => {
-    console.log('props', props);
-    const {
-      setErrors,
-      setSubmitting,
-      props: { history, createEventMutation },
-    } = props;
-
-    try {
-      // const event = await createEventMutation({
-      //   variables: values,
-      // });
-      // const { idToken, accessToken, expiresIn } = authUser.data.login;
-      // login(idToken, accessToken, expiresIn);
-      // history.push('/');
-    } catch (error) {
-      console.error(error);
-      // const errors = parseErrors(error);
-      // setErrors(errors);
-    } finally {
-      setSubmitting(false);
-    }
-  },
-};
-
 export default compose(
   withRouter,
-  graphql(CREATE_EVENT, config),
-  withFormik(createEventProps)
+  graphql(CREATE_EVENT, config)
 )(CreateEventContainer);

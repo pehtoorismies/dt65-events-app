@@ -8,7 +8,6 @@ import { Medal } from 'styled-icons/fa-solid/Medal';
 import AnimateHeight from 'react-animate-height';
 import HeadCountButton from './HeadCountButton';
 import EditButtons from './EditButtons';
-import PreviewButtons from './PreviewButtons';
 import type { Event, Participant, ID } from '../../flow-types';
 import { colors } from '../../util/themeAx';
 import { isParticipating, getEventImage } from '../../util';
@@ -18,12 +17,10 @@ const ANIM_TIME = 500;
 
 type Props = {
   event: Event,
-  username: string,
-  onParticipateClick: (participate: boolean) => void,
-  onShowEventClick: (id: ID) => void,
+  username?: string,
+  onParticipateClick?: (participate: boolean) => void,
+  onShowEventClick?: (id: ID) => void,
   onDeleteEventClick?: (id: ID) => void,
-  onCancelClick?: () => void,
-  onCreateEventClick?: (id: ID) => void,
   onEditEventClick?: (id: ID) => void,
   loading?: boolean,
   preview: boolean,
@@ -41,7 +38,6 @@ const evtImg = (type: string) => `url('${getEventImage(type)}')`;
 
 const Wrapper = styled(Flex)`
   max-width: 400px;
-  width: 100%;
 `;
 
 const EventTypeTitle = styled(Text)`
@@ -99,8 +95,6 @@ const EventBox = (props: Props) => {
     onParticipateClick,
     onShowEventClick,
     onDeleteEventClick,
-    onCancelClick,
-    onCreateEventClick,
     onEditEventClick,
     loading,
     fullyOpen,
@@ -112,7 +106,7 @@ const EventBox = (props: Props) => {
     title,
     subtitle,
     participants,
-    location,
+    address,
     time,
     race,
     type,
@@ -146,16 +140,7 @@ const EventBox = (props: Props) => {
     onEditClick: onEditEventClick,
   };
 
-  const previewButtonProps = {
-    onCancelClick,
-    onCreateClick: onCreateEventClick,
-  };
-
-  const buttons = preview ? (
-    <PreviewButtons {...previewButtonProps} />
-  ) : (
-    <EditButtons {...editButtonProps} />
-  );
+  const editButtons = preview ? null : <EditButtons {...editButtonProps} />;
 
   const participateAction = () => {
     if (preview) {
@@ -166,7 +151,7 @@ const EventBox = (props: Props) => {
 
   const count = participants.length;
   return (
-    <Wrapper p={2} bg="white">
+    <Wrapper p={2} bg="white" width="100%">
       <Card width="100%" mx="auto" variant="shadow">
         <ImageBox
           eventImage={evtType.img}
@@ -214,7 +199,7 @@ const EventBox = (props: Props) => {
               <Text fontWeight="bold" color="lightBlack" width={60}>
                 Sijainti:
               </Text>
-              <Text ml={1}>{location}</Text>
+              <Text ml={1}>{address}</Text>
             </Flex>
             <Flex my={1}>
               <Text fontWeight="bold" color="lightBlack" width={60}>
@@ -231,7 +216,7 @@ const EventBox = (props: Props) => {
             <Text my={2}>lorem ipsum</Text>
           </Box>
         </AnimateHeight>
-        {buttons}
+        {editButtons}
       </Card>
     </Wrapper>
   );
@@ -240,9 +225,10 @@ const EventBox = (props: Props) => {
 EventBox.defaultProps = {
   onDeleteEventClick: () => {},
   onEditEventClick: () => {},
-  onCancelClick: () => {},
-  onCreateEventClick: () => {},
+  onParticipateClick: () => {},
+  onShowEventClick: () => {},
   loading: false,
+  username: '' ,
 };
 
 export default EventBox;

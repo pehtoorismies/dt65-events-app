@@ -5,13 +5,16 @@ import { action } from '@storybook/addon-actions';
 import { withFormik } from 'formik';
 import faker from 'faker';
 import { times } from 'ramda';
-import EventTypeSelector from './Creator/EventTypeSelector';
-import EventDateSelector from './Creator/EventDateSelector';
 import PlainCreatorForm, { formikProps as createProps } from './Creator';
 import EventBox from './EventBox';
 import EditButtons from './EditButtons';
 import PreviewButtons from './PreviewButtons';
 import HeadCountButton from './HeadCountButton';
+import StepType from './Creator/StepType';
+import StepTitle from './Creator/StepTitle';
+import StepDate from './Creator/StepDate';
+import StepPreview from './Creator/StepPreview';
+import StepDescription from './Creator/StepDescription.jsx';
 import { EVENT_TYPES } from '../../constants';
 
 const createUser = id => {
@@ -127,23 +130,47 @@ storiesOf('Event/Buttons', module)
     <EditButtons {...editButtonProps} fullyOpen={false} showDetails={false} />
   ))
   .add('Previev ', () => (
-    <PreviewButtons onCreateClick={action('Create')} onCancelClick={action('Cancel')} />
+    <PreviewButtons
+      onCreateClick={action('Create')}
+      onCancelClick={action('Cancel')}
+    />
   ));
 
 storiesOf('Event/Creator', module)
-  .add('type', () => (
-    <EventTypeSelector
-      onEventClick={action('Event Type')}
-      eventTypes={EVENT_TYPES}
-      preSelected="Cycling"
+  .add('stpe type', () => (
+    <StepType race={false}  handleFormSubmit={action('Submit')} />
+  ))
+  .add('step titles', () => (
+    <StepTitle
+      handleFormSubmit={action('Submit')}
+      onPrevClick={action('Prev')}
+      title=""
+      subtitle=""
     />
   ))
-  .add('date', () => (
-    <EventDateSelector
-      onSetDateClick={action('Date select')}
-      preselected={null}
+  .add('step date', () => (
+    <StepDate
+      handleFormSubmit={action('Submit')}
+      onPrevClick={action('Prev')}
+      date=""
+      time=""
     />
   ))
+  .add('step description', () => (
+    <StepDescription
+      handleFormSubmit={action('Submit')}
+      onPrevClick={action('Prev')}
+      description=""
+    />
+  ))
+  .add('step preview', () => (
+    <StepPreview
+      onCreateClick={action('Create')}
+      onPrevClick={action('Prev')}
+      event={event}
+    />
+  ))
+  
   .add('wizard', () => (
     <Creator onSubmit={action('Submit')} onCancel={action('Cancel')} />
   ));

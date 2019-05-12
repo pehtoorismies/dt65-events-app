@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import { compose, Query } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { map } from 'ramda';

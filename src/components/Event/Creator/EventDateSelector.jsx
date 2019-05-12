@@ -1,6 +1,7 @@
 // @flow
 import React, { useState } from 'react';
 import DatePicker from 'react-mobile-datepicker';
+import { Portal } from 'react-portal'
 import styled from 'styled-components';
 import { Flex, Box, Text } from 'rebass';
 import { format, getDay } from 'date-fns';
@@ -81,6 +82,7 @@ const EventDateSelector = (props: Props) => {
         </DateBox>
 
         <Box bg="pink">
+          <Portal>
           <DatePicker
             showCaption
             showHeader
@@ -95,6 +97,7 @@ const EventDateSelector = (props: Props) => {
             onSelect={okClick}
             onCancel={() => setIsOpen(false)}
           />
+          </Portal>
         </Box>
       </Flex>
     </React.Fragment>

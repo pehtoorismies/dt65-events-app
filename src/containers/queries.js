@@ -44,7 +44,7 @@ const DELETE_EVENT = gql`
 
 const FUTURE_EVENTS = gql`
   query Events($date: DateTime!) {
-    events(where: { date_gt: $date }) {
+    events(where: { date_gt: $date }, orderBy: date_ASC) {
       ...EventDetails
       ...EventParticipants
     }
@@ -67,7 +67,6 @@ const LOGOUT_LOCAL_USER = gql`
     logoutLocalUser @client
   }
 `;
-
 
 const JOIN_EVENT = gql`
   mutation JoinEvent($eventId: ID!, $username: String!) {

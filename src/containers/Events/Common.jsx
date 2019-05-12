@@ -64,7 +64,6 @@ const findType = (type, allTypes) => {
 
 const formatEvent = (evt: any) => ({
   ...evt,
-  location: evt.address,
   name: evt.title,
   type: findType(evt.type, EVENT_TYPES),
   date: new Date(evt.date),
